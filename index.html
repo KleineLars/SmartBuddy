@@ -2,273 +2,570 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartGrid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SmartGrid — De beste Smartschool Extensie</title>
 
     <link rel="icon" type="image/png" href="favicon.png">
 
+    <!-- Fonts geactiveerd vanuit de LuaMotion stijl -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
     <style>
         :root {
+            /* Originele Light Mode Kleuren */
             --bg-color: #ffffff;
             --main-color: #ff6600; 
             --text-color: #1a1a1a;
-            --card-bg: rgba(245, 245, 245, 0.4);
-            --nav-bg: rgba(255, 255, 255, 0.1);
+            --text-muted: #666666;
+            --card-bg: #f9f9f9;
+            --nav-bg: rgba(255, 255, 255, 0.8);
             --footer-text: #666666;
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --liquid-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 5px 15px rgba(0,0,0,0.05);
-            --cta-gradient: linear-gradient(-45deg, #ff6600, #ff9e00, #ff6600);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --cta-gradient: linear-gradient(135deg, #ff6600, #ff9e00);
+            --font-sans: 'Geist', 'DM Sans', system-ui, sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
+                /* Originele Dark Mode Kleuren */
                 --bg-color: #0a0a0a;
                 --main-color: #3b82f6; 
                 --text-color: #ffffff;
-                --card-bg: rgba(22, 22, 22, 0.4);
-                --nav-bg: rgba(0, 0, 0, 0.2);
+                --text-muted: #999999;
+                --card-bg: rgba(22, 22, 22, 0.6);
+                --nav-bg: rgba(10, 10, 10, 0.8);
                 --footer-text: #999999;
-                --glass-border: rgba(255, 255, 255, 0.1);
-                --liquid-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 10px 20px rgba(0,0,0,0.3);
-                --cta-gradient: linear-gradient(-45deg, #3b82f6, #2dd4bf, #3b82f6);
+                --glass-border: rgba(255, 255, 255, 0.08);
+                --cta-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
             }
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes liquidFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: var(--font-sans);
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            line-height: 1.5;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            min-height: 100vh;
-            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.05), transparent), var(--bg-color);
+            -webkit-font-smoothing: antialiased;
         }
 
-        .glass-btn {
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--liquid-shadow);
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 15px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .glass-btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--main-color);
-            box-shadow: inset 0 2px 10px rgba(255,255,255,0.1), 0 8px 25px rgba(0,0,0,0.1);
-        }
-
+        /* Navigatie in LuaMotion Stijl */
         nav {
-            width: 90%;
-            max-width: 1000px;
-            margin-top: 20px;
-            padding: 12px 20px;
-            background: var(--nav-bg);
-            border-radius: 25px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
             position: sticky;
-            top: 20px;
+            top: 0;
             z-index: 100;
-            animation: fadeInUp 0.8s ease-out;
         }
 
-        .logo { font-weight: 900; font-size: 1.5rem; color: var(--main-color); }
+        .logo { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800; 
+            font-size: 1.25rem; 
+            color: var(--text-color);
+            letter-spacing: -0.02em;
+        }
+        
+        .logo span {
+            color: var(--main-color);
+        }
 
-        .nav-links { display: flex; gap: 10px; }
+        .nav-links { 
+            display: flex; 
+            gap: 8px; 
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-color);
+            background: var(--glass-border);
+        }
 
         .btn-install {
+            background: var(--text-color);
+            color: var(--bg-color);
+            border: 1px solid transparent;
+            font-weight: 600;
+        }
+
+        .btn-install:hover {
             background: var(--main-color);
             color: white;
-            border: 1px solid rgba(255,255,255,0.2);
         }
 
+        /* Hero Sectie */
         header {
             text-align: center;
-            padding: 100px 20px 60px;
-            animation: fadeInUp 1s ease-out;
+            padding: 120px 24px 80px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        h1 { font-size: clamp(45px, 8vw, 85px); margin: 0; color: var(--main-color); letter-spacing: -2px; }
-        .tagline { font-size: clamp(18px, 3vw, 32px); font-weight: 300; margin-top: 10px; }
-
-        .cta-liquid {
-            display: inline-block;
-            margin-top: 40px;
-            background: var(--cta-gradient);
-            background-size: 200% 200%;
-            animation: liquidFlow 5s infinite;
-            color: white;
-            padding: 20px 50px;
-            border-radius: 20px;
-            font-size: 22px;
+        h1 { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(38px, 6vw, 68px); 
             font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px; 
+            color: var(--text-color); 
+            letter-spacing: -0.03em; 
+        }
+
+        h1 span {
+            background: var(--cta-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline { 
+            font-size: clamp(16px, 2vw, 20px); 
+            font-weight: 400; 
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        
+        .tagline b {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
             text-decoration: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            transition: all 0.2s ease;
+            border: 1px solid var(--glass-border);
         }
 
-        .cta-liquid:hover { transform: scale(1.05) translateY(-5px); }
+        .cta-button:hover { 
+            background: var(--main-color);
+            color: white;
+            transform: translateY(-1px);
+        }
 
-        .install-wrap {
+        /* Content Wrappers & Grid layout */
+        .container {
             width: 90%;
-            max-width: 750px;
-            margin-bottom: 80px;
-            animation: fadeInUp 1.2s ease-out;
+            max-width: 1000px;
+            margin: 0 auto 80px;
         }
 
-        .step-title { text-align: center; font-size: 32px; margin-bottom: 50px; }
+        .section-title { 
+            text-align: center; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px; 
+            font-weight: 700;
+            margin-bottom: 40px; 
+            letter-spacing: -0.02em;
+        }
+
+        /* Features Gecentreerd Layout met Flexbox */
+        .features-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start; /* Zorgt ervoor dat ze niet ongewenst mee uittrekken op de Y-as */
+            gap: 20px;
+        }
+
+        .feature-card {
+            flex: 1 1 280px;
+            max-width: 320px; 
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 24px 32px;
+            border-radius: 12px;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Hover OF wanneer geklikt (locked) */
+        .feature-card:hover, .feature-card.locked {
+            border-color: var(--main-color);
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--main-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0;
+        }
+
+        .dropdown-icon {
+            font-family: var(--font-mono);
+            color: var(--main-color);
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Lijst onzichtbaar maken standaard */
+        .feature-list {
+            list-style: none;
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .feature-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--main-color);
+            font-family: var(--font-mono);
+        }
+
+        /* Uitklappen bij hover OF wanneer geklikt (locked) */
+        .feature-card:hover .feature-list,
+        .feature-card.locked .feature-list {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 24px;
+            pointer-events: auto;
+        }
+
+        /* Icoontje draaien (van + naar x) */
+        .feature-card:hover .dropdown-icon,
+        .feature-card.locked .dropdown-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Stappenplan Layout */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
 
         .step {
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            margin-bottom: 20px;
-            padding: 35px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 25px;
             border: 1px solid var(--glass-border);
-            transition: 0.4s;
+            padding: 32px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            transition: border-color 0.2s ease;
         }
 
-        .step:hover { transform: scale(1.02); border-color: var(--main-color); }
+        .step:hover { 
+            border-color: var(--main-color); 
+        }
 
         .num {
-            background: var(--main-color);
-            color: white;
-            min-width: 50px;
-            height: 50px;
-            border-radius: 18px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--main-color);
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.1em;
         }
 
-        .step-info h3 { margin: 0 0 10px 0; font-size: 24px; }
-        .step-info p { margin: 0; opacity: 0.9; line-height: 1.6; font-size: 18px; }
+        .step-info h3 { 
+            margin: 0 0 12px 0; 
+            font-size: 18px; 
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        
+        .step-info p { 
+            margin: 0; 
+            color: var(--text-muted);
+            line-height: 1.6; 
+            font-size: 15px; 
+        }
 
-        .contributor-list { list-style: none; padding: 0; margin: 0; }
-        .contributor-list li { margin-bottom: 8px; font-size: 16px; }
-        .contributor-list b { color: var(--main-color); }
+        .step-info a {
+            color: var(--main-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .step-info a:hover {
+            text-decoration: underline;
+        }
 
+        /* Team Sectie Layout */
+        .team-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 32px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .team-card h3 {
+            font-size: 14px;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            color: var(--main-color);
+            margin-bottom: 16px;
+            letter-spacing: 0.05em;
+        }
+
+        .contributor-list { 
+            list-style: none; 
+        }
+        
+        .contributor-list li b { 
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .contributor-list p { 
+            font-size: 14px; 
+            color: var(--text-muted); 
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        /* Footer */
         footer {
             margin-top: auto;
-            padding: 40px;
+            padding: 48px 24px;
             color: var(--footer-text);
-            font-size: 14px;
+            font-size: 13px;
+            font-family: var(--font-mono);
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
         }
 
-        footer b { color: var(--main-color); }
+        footer b { 
+            color: var(--text-color); 
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .step { flex-direction: column; text-align: center; }
+            nav { padding: 16px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Premium Navigatiebalk -->
     <nav>
-        <div class="logo">SmartGrid</div>
+        <div class="logo">Smart<span>Grid</span></div>
         
         <div class="nav-links">
-            <a href="#setup" class="glass-btn">Installatie</a>
-            <a href="https://discord.gg/CkeXqXpQGa" target="_blank" class="glass-btn">Discord</a>
-            <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo/reviews" target="_blank" class="glass-btn">Reviews</a>
+            <a href="#features" class="nav-btn">Functies</a>
+            <a href="#setup" class="nav-btn">Installatie</a>
+            <a href="https://discord.gg/CkeXqXpQGa" target="_blank" class="nav-btn">Discord</a>
+            <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo/reviews" target="_blank" class="nav-btn">Reviews</a>
         </div>
 
-        <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank" class="glass-btn btn-install">Installeren</a>
+        <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank" class="nav-btn btn-install">Installeren</a>
     </nav>
 
+    <!-- Hero Header -->
     <header>
-        <h1>SmartGrid</h1>
-        <p class="tagline">beste <b>Smartschool extensie</b></p>
-        <a href="#setup" class="cta-liquid">Probeer het nu</a>
+        <h1>De <span>SmartGrid</span> Extensie</h1>
+        <p class="tagline">Ervaar de aller <b>beste Smartschool extensie</b> die er is. Volledig gebouwd voor slimme AI-integraties, geavanceerde puntenberekening en jouw eigen personalisatie.</p>
+        <a href="#setup" class="cta-button">Probeer het nu</a>
     </header>
 
-    <div class="install-wrap" id="setup">
-        <h2 class="step-title">Hoe SmartGrid te installeren</h2>
+    <!-- Dropdown Functies Sectie -->
+    <div class="container" id="features">
+        <h2 class="section-title">Alles wat SmartGrid biedt</h2>
 
-        <div class="step">
-            <div class="num">1</div>
-            <div class="step-info">
-                <h3>Ga naar de Chrome Web Store</h3>
-                <p>Ga naar de Web Store en zoek naar SmartGrid of klik op 
-                    <a style="color:var(--main-color); font-weight:800; text-decoration:none;" href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank">SmartGrid</a>.
-                </p>
+        <div class="features-grid">
+            <!-- Berichten -->
+            <div class="feature-card" onclick="toggleLock(this)">
+                <div class="feature-header">
+                    <h3>// Berichten</h3>
+                    <span class="dropdown-icon">+</span>
+                </div>
+                <ul class="feature-list">
+                    <li>AI Verbeteraar</li>
+                    <li>Gewoon Verbeteren</li>
+                    <li>Formeel herschrijven</li>
+                    <li>Heel Formeel herschrijven</li>
+                </ul>
             </div>
-        </div>
 
-        <div class="step">
-            <div class="num">2</div>
-            <div class="step-info">
-                <h3>Klik op "Installeren"</h3>
-                <p>Klik op Downloaden en sta vervolgens alle vereiste machtigingen toe.</p>
+            <!-- Resultaten -->
+            <div class="feature-card" onclick="toggleLock(this)">
+                <div class="feature-header">
+                    <h3>// Resultaten</h3>
+                    <span class="dropdown-icon">+</span>
+                </div>
+                <ul class="feature-list">
+                    <li>SmartGrid Resultatenoverzicht</li>
+                    <li>Voortgangsrapport</li>
+                    <li>Motiverende Quotes</li>
+                    <li>Jaartotaal & Kleurcodering</li>
+                    <li>Sneltoets Ctrl + G</li>
+                    <li>Smartschool++ Thema Integratie</li>
+                </ul>
             </div>
-        </div>
 
-        <div class="step">
-            <div class="num">3</div>
-            <div class="step-info">
-                <h3>Ga naar je Smartschool</h3>
-                <p>Ga naar je Smartschool en vernieuw de pagina.<br>
-                <strong>Gefeliciteerd, je reis is net begonnen!</strong></p>
+            <!-- Punten -->
+            <div class="feature-card" onclick="toggleLock(this)">
+                <div class="feature-header">
+                    <h3>// Punten</h3>
+                    <span class="dropdown-icon">+</span>
+                </div>
+                <ul class="feature-list">
+                    <li>Totaalberekening (Lijstweergave)</li>
+                    <li>Totaalberekening (Rasterweergave)</li>
+                </ul>
             </div>
-        </div>
-    </div>
 
-    <!-- ONS TEAM SECTIE -->
-    <div class="install-wrap">
-        <h2 class="step-title">Ons team</h2>
-        <div class="step">
-            <div class="step-info">
-                <h3>developer team</h3>
-                <ul class="contributor-list">
-                    <li><b>Kleine_Lars</b></li>
-                    <p style="font-size: 16px; opacity: 0.8; margin-top: 5px;">
-                        CEO, Developer, Designer, Social Media Manager & Discord Administrator
-                    </p>
+            <!-- Login -->
+            <div class="feature-card" onclick="toggleLock(this)">
+                <div class="feature-header">
+                    <h3>// Login</h3>
+                    <span class="dropdown-icon">+</span>
+                </div>
+                <ul class="feature-list">
+                    <li>Custom Login Pagina</li>
+                    <li>SmartGrid Branding</li>
+                </ul>
+            </div>
+
+            <!-- Instellingen -->
+            <div class="feature-card" onclick="toggleLock(this)">
+                <div class="feature-header">
+                    <h3>// Instellingen</h3>
+                    <span class="dropdown-icon">+</span>
+                </div>
+                <ul class="feature-list">
+                    <li>Gemini API Configuratie</li>
+                    <li>Verbeterstijl Kiezen</li>
                 </ul>
             </div>
         </div>
     </div>
 
+    <!-- Installatie Stappenplan Grid -->
+    <div class="container" id="setup">
+        <h2 class="section-title">Hoe SmartGrid te installeren</h2>
+
+        <div class="steps-grid">
+            <!-- Stap 1 -->
+            <div class="step">
+                <div class="num">// 01</div>
+                <div class="step-info">
+                    <h3>Chrome Web Store</h3>
+                    <p>Ga naar de officiële Web Store en zoek naar SmartGrid of klik direct op 
+                        <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank">SmartGrid</a>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stap 2 -->
+            <div class="step">
+                <div class="num">// 02</div>
+                <div class="step-info">
+                    <h3>Klik op "Installeren"</h3>
+                    <p>Klik simpelweg op de downloadknop en sta vervolgens de vereiste machtigingen toe in je browser.</p>
+                </div>
+            </div>
+
+            <!-- Stap 3 -->
+            <div class="step">
+                <div class="num">// 03</div>
+                <div class="step-info">
+                    <h3>Start je Smartschool</h3>
+                    <p>Navigeer naar je eigen Smartschool-pagina en vernieuw deze. <strong>Gefeliciteerd, je reis is begonnen!</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ons Team Sectie -->
+    <div class="container">
+        <h2 class="section-title">Ons team</h2>
+        <div class="team-card">
+            <h3>Developer Team</h3>
+            <ul class="contributor-list">
+                <li><b>Kleine_Lars</b></li>
+                <p>CEO, Developer, Designer, Social Media Manager & Discord Administrator</p>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Minimalistische Footer -->
     <footer>
-        © 2026 SmartGrid • Build by <b>Kleine_Lars</b>
+        © 2026 SmartGrid • Built by <b>Kleine_Lars</b>
     </footer>
 
+    <!-- Script voor Dropdown functionaliteit -->
+    <script>
+        function toggleLock(element) {
+            // Voegt de 'locked' class toe of verwijdert deze bij een klik
+            element.classList.toggle('locked');
+        }
+    </script>
 </body>
 </html>
