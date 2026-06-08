@@ -7,7 +7,6 @@
 
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <!-- Fonts geactiveerd vanuit de LuaMotion stijl -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -142,6 +141,7 @@
 
         h1 span {
             background: var(--cta-gradient);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -413,7 +413,6 @@
 </head>
 <body>
 
-    <!-- Premium Navigatiebalk -->
     <nav>
         <div class="logo">Smart<span>Grid</span></div>
         
@@ -427,19 +426,16 @@
         <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank" class="nav-btn btn-install">Installeren</a>
     </nav>
 
-    <!-- Hero Header -->
     <header>
         <h1>De <span>SmartGrid</span> Extensie</h1>
-        <p class="tagline">Ervaar de aller <b>beste Smartschool extensie</b> die er is. Volledig gebouwd voor slimme AI-integraties, geavanceerde puntenberekening en jouw eigen personalisatie.</p>
+        <p class="tagline">Ervaar de <b>beste Smartschool extensie</b> die er is. Met een slimme AI bericht verbetering tool en geavanceerde puntenberekening.</p>
         <a href="#setup" class="cta-button">Probeer het nu</a>
     </header>
 
-    <!-- Dropdown Functies Sectie -->
     <div class="container" id="features">
         <h2 class="section-title">Alles wat SmartGrid biedt</h2>
 
         <div class="features-grid">
-            <!-- Berichten -->
             <div class="feature-card" onclick="toggleLock(this)">
                 <div class="feature-header">
                     <h3>// Berichten</h3>
@@ -448,12 +444,13 @@
                 <ul class="feature-list">
                     <li>AI Verbeteraar</li>
                     <li>Gewoon Verbeteren</li>
-                    <li>Formeel herschrijven</li>
-                    <li>Heel Formeel herschrijven</li>
+                    <li>Formeel</li>
+                    <li>Heel Formeel</li>
+                    <li>AI Vertalen (Frans, Duits, Engels)</li>
+                    <li>AI Onderwerp (Automatisch onderwerp invullen)</li>
                 </ul>
             </div>
 
-            <!-- Resultaten -->
             <div class="feature-card" onclick="toggleLock(this)">
                 <div class="feature-header">
                     <h3>// Resultaten</h3>
@@ -463,25 +460,22 @@
                     <li>SmartGrid Resultatenoverzicht</li>
                     <li>Voortgangsrapport</li>
                     <li>Motiverende Quotes</li>
-                    <li>Jaartotaal & Kleurcodering</li>
-                    <li>Sneltoets Ctrl + G</li>
-                    <li>Smartschool++ Thema Integratie</li>
+                    <li>Jaartotaal</li>
+                    <li>Kleurcodering Scores</li>
                 </ul>
             </div>
 
-            <!-- Punten -->
             <div class="feature-card" onclick="toggleLock(this)">
                 <div class="feature-header">
                     <h3>// Punten</h3>
                     <span class="dropdown-icon">+</span>
                 </div>
                 <ul class="feature-list">
-                    <li>Totaalberekening (Lijstweergave)</li>
-                    <li>Totaalberekening (Rasterweergave)</li>
+                    <li>Totaalberekening Lijstweergave</li>
+                    <li>Totaalberekening Rasterweergave</li>
                 </ul>
             </div>
 
-            <!-- Login -->
             <div class="feature-card" onclick="toggleLock(this)">
                 <div class="feature-header">
                     <h3>// Login</h3>
@@ -489,11 +483,9 @@
                 </div>
                 <ul class="feature-list">
                     <li>Custom Login Pagina</li>
-                    <li>SmartGrid Branding</li>
                 </ul>
             </div>
 
-            <!-- Instellingen -->
             <div class="feature-card" onclick="toggleLock(this)">
                 <div class="feature-header">
                     <h3>// Instellingen</h3>
@@ -507,12 +499,10 @@
         </div>
     </div>
 
-    <!-- Installatie Stappenplan Grid -->
     <div class="container" id="setup">
         <h2 class="section-title">Hoe SmartGrid te installeren</h2>
 
         <div class="steps-grid">
-            <!-- Stap 1 -->
             <div class="step">
                 <div class="num">// 01</div>
                 <div class="step-info">
@@ -523,7 +513,6 @@
                 </div>
             </div>
 
-            <!-- Stap 2 -->
             <div class="step">
                 <div class="num">// 02</div>
                 <div class="step-info">
@@ -532,7 +521,6 @@
                 </div>
             </div>
 
-            <!-- Stap 3 -->
             <div class="step">
                 <div class="num">// 03</div>
                 <div class="step-info">
@@ -543,7 +531,6 @@
         </div>
     </div>
 
-    <!-- Ons Team Sectie -->
     <div class="container">
         <h2 class="section-title">Ons team</h2>
         <div class="team-card">
@@ -555,12 +542,10 @@
         </div>
     </div>
 
-    <!-- Minimalistische Footer -->
     <footer>
         © 2026 SmartGrid • Built by <b>Kleine_Lars</b>
     </footer>
 
-    <!-- Script voor Dropdown functionaliteit -->
     <script>
         function toggleLock(element) {
             // Voegt de 'locked' class toe of verwijdert deze bij een klik
