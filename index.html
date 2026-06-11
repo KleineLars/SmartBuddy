@@ -381,6 +381,147 @@
             line-height: 1.5;
         }
 
+        /* ===== PRIVACY SECTIE ===== */
+        .privacy-section {
+            border-top: 1px solid var(--glass-border);
+            padding-top: 80px;
+        }
+
+        .privacy-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+
+        .privacy-card h3 {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--main-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        .privacy-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .privacy-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .privacy-card strong {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .privacy-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 12px;
+        }
+
+        .privacy-card ul li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .privacy-card ul li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--main-color);
+            font-family: var(--font-mono);
+        }
+
+        .privacy-card a {
+            color: var(--main-color);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .privacy-card a:hover {
+            text-decoration: underline;
+        }
+
+        .privacy-summary {
+            background: var(--card-bg);
+            border: 1px solid var(--main-color);
+            border-radius: 12px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+        }
+
+        .privacy-summary .badge {
+            display: inline-block;
+            background: var(--main-color);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .privacy-summary p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .privacy-summary strong {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .privacy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+
+        .privacy-table th,
+        .privacy-table td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 14px;
+        }
+
+        .privacy-table th {
+            color: var(--text-color);
+            font-weight: 700;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .privacy-table td {
+            color: var(--text-muted);
+        }
+
+        .privacy-date {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-family: var(--font-mono);
+            margin-bottom: 32px;
+        }
+
         /* Footer */
         footer {
             margin-top: auto;
@@ -395,6 +536,16 @@
         footer b { 
             color: var(--text-color); 
             font-weight: 600;
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--main-color);
         }
 
         /* Responsive Design */
@@ -419,6 +570,7 @@
         <div class="nav-links">
             <a href="#features" class="nav-btn">Functies</a>
             <a href="#setup" class="nav-btn">Installatie</a>
+            <a href="#privacy" class="nav-btn">Privacy</a>
             <a href="https://discord.gg/CkeXqXpQGa" target="_blank" class="nav-btn">Discord</a>
             <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo/reviews" target="_blank" class="nav-btn">Reviews</a>
         </div>
@@ -542,8 +694,118 @@
         </div>
     </div>
 
+    <!-- ===== PRIVACY BELEID SECTIE ===== -->
+    <div class="container privacy-section" id="privacy">
+        <h2 class="section-title">Privacybeleid</h2>
+        <p class="privacy-date">Laatst bijgewerkt: 11 juni 2026</p>
+
+        <div class="privacy-summary">
+            <span class="badge">Samenvatting</span>
+            <p>SmartGrid verzamelt <strong>geen persoonlijke gegevens</strong>. Alle instellingen worden lokaal in je browser opgeslagen. Wanneer je de AI-functies gebruikt, wordt de tekst van je bericht naar de Google Gemini API gestuurd om te verwerken. Er worden geen gegevens naar onze eigen servers gestuurd.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Welke gegevens worden verzameld</h3>
+            <p>SmartGrid slaat de volgende gegevens <strong>lokaal</strong> op in je browser via <code>chrome.storage.sync</code>:</p>
+            <table class="privacy-table">
+                <thead>
+                    <tr>
+                        <th>Gegeven</th>
+                        <th>Doel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gemini API-sleutel</td>
+                        <td>Authenticatie bij de Google Gemini API voor AI-functies</td>
+                    </tr>
+                    <tr>
+                        <td>AI-verbeterstijl</td>
+                        <td>Onthouden van je voorkeur (gewoon / formeel / zeer formeel)</td>
+                    </tr>
+                    <tr>
+                        <td>Thema-instellingen</td>
+                        <td>Onthouden van je gekozen kleurenschema</td>
+                    </tr>
+                    <tr>
+                        <td>Tutorial-status</td>
+                        <td>Bijhouden of de rondleiding al getoond is</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Deze gegevens worden <strong>uitsluitend lokaal</strong> in je browser opgeslagen en worden <strong>nooit</strong> naar externe servers van SmartGrid verzonden.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Gegevensverwerking door derden</h3>
+            <p>Wanneer je een van de <strong>AI-functies</strong> gebruikt (AI Verbeteraar, AI Vertaler of AI Onderwerp), wordt het volgende naar de <strong>Google Gemini API</strong> verstuurd:</p>
+            <ul>
+                <li>De <strong>platte tekst</strong> van je bericht (maximaal 3.000 tekens)</li>
+                <li>Je <strong>Gemini API-sleutel</strong> voor authenticatie</li>
+            </ul>
+            <p>Deze gegevens worden verwerkt door <strong>Google LLC</strong> volgens hun eigen privacybeleid: <a href="https://policies.google.com/privacy" target="_blank">Google Privacybeleid</a>.</p>
+            <p>SmartGrid heeft <strong>geen eigen servers</strong> en verstuurt geen gegevens naar andere partijen dan Google.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Gegevens die NIET worden verzameld</h3>
+            <p>SmartGrid verzamelt <strong>geen</strong>:</p>
+            <ul>
+                <li>Persoonlijke identificatiegegevens (naam, e-mailadres, etc.)</li>
+                <li>Browsegeschiedenis of surfgedrag</li>
+                <li>Schoolresultaten of cijfers (deze worden alleen lokaal in je browser weergegeven)</li>
+                <li>Inloggegevens van Smartschool</li>
+                <li>Cookies of tracking-gegevens</li>
+                <li>Analytische of diagnostische gegevens</li>
+            </ul>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Hoe gegevens worden opgeslagen</h3>
+            <p>Alle instellingen worden opgeslagen via de <strong>Chrome Storage Sync API</strong>. Dit betekent:</p>
+            <ul>
+                <li>Gegevens worden <strong>lokaal</strong> in je browser opgeslagen</li>
+                <li>Als je bent ingelogd op Chrome, worden instellingen gesynchroniseerd tussen je apparaten via je Google-account</li>
+                <li>Gegevens worden automatisch verwijderd wanneer je de extensie verwijdert</li>
+                <li>Je kunt alle gegevens handmatig wissen via de extensie-instellingen in Chrome</li>
+            </ul>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Gegevens delen met derden</h3>
+            <p>SmartGrid deelt gegevens met <strong>één derde partij</strong>:</p>
+            <p><strong>Google LLC (Gemini API)</strong> — Alleen wanneer je actief een AI-functie gebruikt, wordt de tekst van je bericht naar de Google Gemini API gestuurd. Dit gebeurt <strong>alleen op jouw verzoek</strong> (door op een AI-knop te klikken) en nooit automatisch op de achtergrond.</p>
+            <p>Er worden <strong>geen gegevens</strong> gedeeld met andere partijen, adverteerders, databrokers of analyse-diensten.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Toestemming en controle</h3>
+            <ul>
+                <li>De AI-functies werken <strong>alleen</strong> als je zelf een API-sleutel instelt</li>
+                <li>Berichttekst wordt <strong>alleen</strong> verstuurd wanneer jij op een AI-knop klikt</li>
+                <li>Je kunt je API-sleutel op elk moment verwijderen via de SmartGrid-instellingen</li>
+                <li>Je kunt alle opgeslagen gegevens wissen via <strong>chrome://extensions</strong> → SmartGrid → Gegevens wissen</li>
+            </ul>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Kinderen</h3>
+            <p>SmartGrid is geschikt voor gebruik door scholieren. De extensie verzamelt geen persoonlijke gegevens van kinderen en voldoet aan de vereisten voor bescherming van minderjarigen.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Wijzigingen</h3>
+            <p>Bij wijzigingen in dit privacybeleid wordt de datum "Laatst bijgewerkt" bovenaan aangepast. Belangrijke wijzigingen worden ook meegedeeld in de update-opmerkingen van de extensie.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3>// Contact</h3>
+            <p>Heb je vragen over dit privacybeleid? Neem contact op via het ondersteuningsformulier op de <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank">Chrome Web Store-pagina</a> van SmartGrid of via onze <a href="https://discord.gg/CkeXqXpQGa" target="_blank">Discord server</a>.</p>
+        </div>
+    </div>
+
     <footer>
-        © 2026 SmartGrid • Built by <b>Kleine_Lars</b>
+        © 2026 SmartGrid • Built by <b>Kleine_Lars</b> • <a href="#privacy">Privacybeleid</a>
     </footer>
 
     <script>
