@@ -1,45 +1,25 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>SmartGrid — De beste Smartschool Extensie</title>
+    <title>SmartBuddy</title>
 
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+    <!-- Google Symbols (Behouden zoals gevraagd) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Symbols:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
         :root {
-            /* Originele Light Mode Kleuren */
-            --bg-color: #ffffff;
-            --main-color: #ff6600; 
-            --text-color: #1a1a1a;
-            --text-muted: #666666;
-            --card-bg: #f9f9f9;
-            --nav-bg: rgba(255, 255, 255, 0.8);
-            --footer-text: #666666;
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --cta-gradient: linear-gradient(135deg, #ff6600, #ff9e00);
-            --font-sans: 'Geist', 'DM Sans', system-ui, sans-serif;
-            --font-mono: 'IBM Plex Mono', monospace;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                /* Originele Dark Mode Kleuren */
-                --bg-color: #0a0a0a;
-                --main-color: #3b82f6; 
-                --text-color: #ffffff;
-                --text-muted: #999999;
-                --card-bg: rgba(22, 22, 22, 0.6);
-                --nav-bg: rgba(10, 10, 10, 0.8);
-                --footer-text: #999999;
-                --glass-border: rgba(255, 255, 255, 0.08);
-                --cta-gradient: linear-gradient(135deg, #3b82f6, #2dd4bf);
-            }
+            --border-color: #d1d5db;
+            --text-main: #374151;
+            --text-muted: #6b7280;
+            --bg-body: #f9fafb;
+            --bg-container: #ffffff;
+            --primary: #FF4500;
+            --primary-hover: #e03e00;
         }
 
         * {
@@ -49,176 +29,184 @@
         }
 
         body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.5;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* Navigatie in LuaMotion Stijl */
-        nav {
+        .google-symbols {
+            font-family: 'Google Symbols';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            vertical-align: middle;
+            color: var(--primary);
+        }
+
+        /* Views & SPA Fade Logic */
+        .view-container {
+            position: relative;
             width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 16px 24px;
+            flex: 1;
+        }
+
+        .view {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .view.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+
+        /* Classic Nav */
+        nav {
+            background: var(--bg-container);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
 
         .logo { 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 800; 
-            font-size: 1.25rem; 
-            color: var(--text-color);
-            letter-spacing: -0.02em;
+            font-size: 20px; 
+            font-weight: bold; 
+            color: var(--text-main);
+            text-decoration: none;
+            cursor: pointer;
         }
         
         .logo span {
-            color: var(--main-color);
+            color: var(--primary);
         }
 
         .nav-links { 
             display: flex; 
-            gap: 8px; 
+            gap: 15px; 
+            align-items: center;
         }
 
         .nav-btn {
-            background: transparent;
-            color: var(--text-muted);
+            color: var(--text-main);
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
+            font-size: 15px;
+            cursor: pointer;
         }
 
         .nav-btn:hover {
-            color: var(--text-color);
-            background: var(--glass-border);
+            text-decoration: underline;
         }
 
         .btn-install {
-            background: var(--text-color);
-            color: var(--bg-color);
-            border: 1px solid transparent;
-            font-weight: 600;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: bold;
         }
 
         .btn-install:hover {
-            background: var(--main-color);
-            color: white;
+            background: var(--primary-hover);
+            text-decoration: none;
+            color: #ffffff;
         }
 
-        /* Hero Sectie */
+        /* Containers */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--bg-container);
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Hero */
         header {
             text-align: center;
-            padding: 120px 24px 80px;
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 20px 0 40px 0;
         }
 
         h1 { 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: clamp(38px, 6vw, 68px); 
-            font-weight: 800;
-            line-height: 1.1;
+            font-size: 32px; 
+            color: #111827;
             margin-bottom: 20px; 
-            color: var(--text-color); 
-            letter-spacing: -0.03em; 
-        }
-
-        h1 span {
-            background: var(--cta-gradient);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .tagline { 
-            font-size: clamp(16px, 2vw, 20px); 
-            font-weight: 400; 
+            font-size: 16px; 
             color: var(--text-muted);
+            margin-bottom: 30px;
             max-width: 600px;
-            margin: 0 auto 32px;
-        }
-        
-        .tagline b {
-            color: var(--text-color);
-            font-weight: 600;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .cta-button {
-            display: inline-block;
-            background: var(--text-color);
-            color: var(--bg-color);
-            padding: 14px 32px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--text-main);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
             text-decoration: none;
-            transition: all 0.2s ease;
-            border: 1px solid var(--glass-border);
+            font-weight: bold;
+        }
+
+        .cta-button .google-symbols {
+            color: #ffffff;
+            font-size: 20px;
         }
 
         .cta-button:hover { 
-            background: var(--main-color);
-            color: white;
-            transform: translateY(-1px);
+            background: #111827;
         }
 
-        /* Content Wrappers & Grid layout */
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            margin: 0 auto 80px;
+        /* Classic Headers */
+        h2.section-title {
+            font-size: 22px;
+            color: #111827;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
 
-        .section-title { 
-            text-align: center; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 28px; 
-            font-weight: 700;
-            margin-bottom: 40px; 
-            letter-spacing: -0.02em;
-        }
-
-        /* Features Gecentreerd Layout met Flexbox */
+        /* Features */
         .features-grid {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: flex-start; /* Zorgt ervoor dat ze niet ongewenst mee uittrekken op de Y-as */
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .feature-card {
-            flex: 1 1 280px;
-            max-width: 320px; 
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            padding: 24px 32px;
-            border-radius: 12px;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px 20px;
+            background: var(--bg-body);
             cursor: pointer;
-            overflow: hidden;
-            user-select: none;
         }
 
-        /* Hover OF wanneer geklikt (locked) */
         .feature-card:hover, .feature-card.locked {
-            border-color: var(--main-color);
+            border-color: var(--primary);
         }
 
         .feature-header {
@@ -228,224 +216,190 @@
         }
 
         .feature-card h3 {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            color: var(--main-color);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 16px;
             margin: 0;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-card h3 .google-symbols {
+            font-size: 20px;
         }
 
         .dropdown-icon {
-            font-family: var(--font-mono);
-            color: var(--main-color);
-            font-size: 20px;
-            font-weight: 400;
-            line-height: 1;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-muted);
+            transition: transform 0.2s;
         }
 
-        /* Lijst onzichtbaar maken standaard */
         .feature-list {
             list-style: none;
-            max-height: 0;
-            opacity: 0;
-            margin-top: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
+            display: none;
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
         }
 
         .feature-list li {
-            position: relative;
-            padding-left: 24px;
-            margin-bottom: 12px;
-            color: var(--text-color);
-            font-size: 15px;
-            line-height: 1.4;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 14px;
         }
 
-        .feature-list li:last-child {
-            margin-bottom: 0;
+        .feature-list li .google-symbols {
+            font-size: 16px;
         }
 
-        .feature-list li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--main-color);
-            font-family: var(--font-mono);
-        }
-
-        /* Uitklappen bij hover OF wanneer geklikt (locked) */
-        .feature-card:hover .feature-list,
         .feature-card.locked .feature-list {
-            max-height: 300px;
-            opacity: 1;
-            margin-top: 24px;
-            pointer-events: auto;
+            display: block;
         }
 
-        /* Icoontje draaien (van + naar x) */
-        .feature-card:hover .dropdown-icon,
         .feature-card.locked .dropdown-icon {
-            transform: rotate(45deg);
+            transform: rotate(180deg);
         }
 
-        /* Stappenplan Layout */
+        /* Steps */
         .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .step {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            padding: 32px;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            transition: border-color 0.2s ease;
-        }
-
-        .step:hover { 
-            border-color: var(--main-color); 
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            background: var(--bg-body);
+            padding: 15px 20px;
+            border-radius: 4px;
         }
 
         .num {
-            font-family: var(--font-mono);
-            color: var(--main-color);
-            font-weight: 600;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
             font-size: 14px;
-            letter-spacing: 0.1em;
         }
 
-        .step-info h3 { 
-            margin: 0 0 12px 0; 
-            font-size: 18px; 
-            font-weight: 600;
-            letter-spacing: -0.01em;
+        .step-info h3 {
+            margin: 0 0 5px 0;
+            color: #111827;
+            font-size: 16px;
         }
-        
-        .step-info p { 
-            margin: 0; 
+
+        .step-info p {
+            margin: 0;
             color: var(--text-muted);
-            line-height: 1.6; 
-            font-size: 15px; 
+            font-size: 14px;
         }
 
         .step-info a {
-            color: var(--main-color);
-            font-weight: 600;
+            color: var(--primary);
             text-decoration: none;
         }
-        
+
         .step-info a:hover {
             text-decoration: underline;
         }
 
-        /* Team Sectie Layout */
+        /* Team */
         .team-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            padding: 32px;
-            border-radius: 12px;
-            max-width: 500px;
-            margin: 0 auto;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 6px;
+            background: var(--bg-body);
         }
 
         .team-card h3 {
+            margin-top: 0;
+            color: #111827;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .contributor-list {
+            list-style: none;
+        }
+
+        .contributor-list b {
+            color: #111827;
+        }
+
+        .contributor-list p {
             font-size: 14px;
-            font-family: var(--font-mono);
-            text-transform: uppercase;
-            color: var(--main-color);
-            margin-bottom: 16px;
-            letter-spacing: 0.05em;
+            color: var(--text-muted);
         }
 
-        .contributor-list { 
-            list-style: none; 
-        }
-        
-        .contributor-list li b { 
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        
-        .contributor-list p { 
-            font-size: 14px; 
-            color: var(--text-muted); 
-            margin-top: 6px;
-            line-height: 1.5;
-        }
-
-        /* ===== PRIVACY SECTIE ===== */
-        .privacy-section {
-            border-top: 1px solid var(--glass-border);
-            padding-top: 80px;
-        }
-
-        .privacy-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 32px;
+        /* Privacy */
+        .privacy-date {
+            color: var(--text-muted);
+            font-size: 14px;
             margin-bottom: 20px;
         }
 
-        .privacy-card h3 {
-            font-family: var(--font-mono);
+        .privacy-summary {
+            background: #fff3f0;
+            border: 1px solid #ffd8cc;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .privacy-summary .badge {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .privacy-summary p {
             font-size: 14px;
-            color: var(--main-color);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 16px;
+            margin: 0;
+        }
+
+        .privacy-card {
+            margin-bottom: 25px;
+        }
+
+        .privacy-card h3 {
+            color: #111827;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
         }
 
         .privacy-card p {
+            font-size: 14px;
             color: var(--text-muted);
-            font-size: 15px;
-            line-height: 1.7;
-            margin-bottom: 12px;
-        }
-
-        .privacy-card p:last-child {
-            margin-bottom: 0;
-        }
-
-        .privacy-card strong {
-            color: var(--text-color);
-            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         .privacy-card ul {
             list-style: none;
-            padding: 0;
-            margin: 8px 0 12px;
+            margin-bottom: 10px;
         }
 
         .privacy-card ul li {
-            position: relative;
-            padding-left: 24px;
             margin-bottom: 8px;
             color: var(--text-muted);
-            font-size: 15px;
-            line-height: 1.5;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
         }
 
-        .privacy-card ul li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--main-color);
-            font-family: var(--font-mono);
+        .privacy-card ul li .google-symbols {
+            font-size: 18px;
         }
 
         .privacy-card a {
-            color: var(--main-color);
-            font-weight: 500;
+            color: var(--primary);
             text-decoration: none;
         }
 
@@ -453,366 +407,372 @@
             text-decoration: underline;
         }
 
-        .privacy-summary {
-            background: var(--card-bg);
-            border: 1px solid var(--main-color);
-            border-radius: 12px;
-            padding: 24px 32px;
-            margin-bottom: 24px;
-        }
-
-        .privacy-summary .badge {
-            display: inline-block;
-            background: var(--main-color);
-            color: #fff;
-            font-family: var(--font-mono);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-        }
-
-        .privacy-summary p {
-            color: var(--text-muted);
-            font-size: 15px;
-            line-height: 1.7;
-            margin: 0;
-        }
-
-        .privacy-summary strong {
-            color: var(--text-color);
-            font-weight: 600;
-        }
-
         .privacy-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 12px 0;
-        }
-
-        .privacy-table th,
-        .privacy-table td {
-            text-align: left;
-            padding: 10px 14px;
-            border-bottom: 1px solid var(--glass-border);
+            margin-top: 10px;
+            margin-bottom: 10px;
             font-size: 14px;
         }
 
+        .privacy-table th, .privacy-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+        }
+
         .privacy-table th {
-            color: var(--text-color);
-            font-weight: 700;
-            font-family: var(--font-mono);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .privacy-table td {
-            color: var(--text-muted);
-        }
-
-        .privacy-date {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            font-family: var(--font-mono);
-            margin-bottom: 32px;
+            background: var(--bg-body);
+            color: #111827;
         }
 
         /* Footer */
         footer {
-            margin-top: auto;
-            padding: 48px 24px;
-            color: var(--footer-text);
-            font-size: 13px;
-            font-family: var(--font-mono);
             text-align: center;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        footer b { 
-            color: var(--text-color); 
-            font-weight: 600;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 14px;
+            background: var(--bg-container);
+            margin-top: auto;
         }
 
         footer a {
-            color: var(--text-muted);
+            color: var(--primary);
             text-decoration: none;
-            transition: color 0.2s ease;
+            cursor: pointer;
         }
 
         footer a:hover {
-            color: var(--main-color);
+            text-decoration: underline;
         }
 
-        /* Responsive Design */
-        @media (max-width: 900px) {
-            .steps-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
+        /* Scroll Animations (Behouden zoals gevraagd) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            nav { padding: 16px; }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-
     <nav>
-        <div class="logo">Smart<span>Grid</span></div>
-        
+        <a class="logo" onclick="showHome(event)">Smart<span>Buddy</span></a>
         <div class="nav-links">
-            <a href="#features" class="nav-btn">Functies</a>
-            <a href="#setup" class="nav-btn">Installatie</a>
-            <a href="#privacy" class="nav-btn">Privacy</a>
-            <a href="https://discord.gg/CkeXqXpQGa" target="_blank" class="nav-btn">Discord</a>
-            <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo/reviews" target="_blank" class="nav-btn">Reviews</a>
+            <a href="#setup" class="nav-btn" onclick="showHome(event, '#setup')">Installatie</a>
+            <a class="nav-btn" onclick="showPrivacy(event)">Privacy</a>
+            <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank" class="nav-btn btn-install">Toevoegen aan Chrome</a>
         </div>
-
-        <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank" class="nav-btn btn-install">Installeren</a>
     </nav>
 
-    <header>
-        <h1>De <span>SmartGrid</span> Extensie</h1>
-        <p class="tagline">Ervaar de <b>beste Smartschool extensie</b> die er is. Met een slimme AI bericht verbetering tool en geavanceerde puntenberekening.</p>
-        <a href="#setup" class="cta-button">Probeer het nu</a>
-    </header>
-
-    <div class="container" id="features">
-        <h2 class="section-title">Alles wat SmartGrid biedt</h2>
-
-        <div class="features-grid">
-            <div class="feature-card" onclick="toggleLock(this)">
-                <div class="feature-header">
-                    <h3>// Berichten</h3>
-                    <span class="dropdown-icon">+</span>
-                </div>
-                <ul class="feature-list">
-                    <li>AI Verbeteraar</li>
-                    <li>Gewoon Verbeteren</li>
-                    <li>Formeel</li>
-                    <li>Heel Formeel</li>
-                    <li>AI Vertalen (Frans, Duits, Engels)</li>
-                    <li>AI Onderwerp (Automatisch onderwerp invullen)</li>
-                </ul>
-            </div>
-
-            <div class="feature-card" onclick="toggleLock(this)">
-                <div class="feature-header">
-                    <h3>// Resultaten</h3>
-                    <span class="dropdown-icon">+</span>
-                </div>
-                <ul class="feature-list">
-                    <li>SmartGrid Resultatenoverzicht</li>
-                    <li>Voortgangsrapport</li>
-                    <li>Motiverende Quotes</li>
-                    <li>Jaartotaal</li>
-                    <li>Kleurcodering Scores</li>
-                </ul>
-            </div>
-
-            <div class="feature-card" onclick="toggleLock(this)">
-                <div class="feature-header">
-                    <h3>// Punten</h3>
-                    <span class="dropdown-icon">+</span>
-                </div>
-                <ul class="feature-list">
-                    <li>Totaalberekening Lijstweergave</li>
-                    <li>Totaalberekening Rasterweergave</li>
-                </ul>
-            </div>
-
-            <div class="feature-card" onclick="toggleLock(this)">
-                <div class="feature-header">
-                    <h3>// Login</h3>
-                    <span class="dropdown-icon">+</span>
-                </div>
-                <ul class="feature-list">
-                    <li>Custom Login Pagina</li>
-                </ul>
-            </div>
-
-            <div class="feature-card" onclick="toggleLock(this)">
-                <div class="feature-header">
-                    <h3>// Instellingen</h3>
-                    <span class="dropdown-icon">+</span>
-                </div>
-                <ul class="feature-list">
-                    <li>Gemini API Configuratie</li>
-                    <li>Verbeterstijl Kiezen</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="container" id="setup">
-        <h2 class="section-title">Hoe SmartGrid te installeren</h2>
-
-        <div class="steps-grid">
-            <div class="step">
-                <div class="num">// 01</div>
-                <div class="step-info">
-                    <h3>Chrome Web Store</h3>
-                    <p>Ga naar de officiële Web Store en zoek naar SmartGrid of klik direct op 
-                        <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank">SmartGrid</a>.
+    <div class="view-container">
+        <!-- HOME VIEW -->
+        <div id="home-view" class="view active">
+            <div class="container">
+                <header>
+                    <h1>SmartBuddy — Build the new way</h1>
+                    <p class="tagline">
+                        Ervaar Smartschool als nooit tevoren. Met de naadloze integratie van AI-tools, verbeterde weergaves en multiplayer games transformeert SmartBuddy jouw schoolervaring tot een productieve en plezierige omgeving.
                     </p>
+                    <a href="#setup" class="cta-button" onclick="showHome(event, '#setup')">
+                        <span class="google-symbols">download</span>
+                        Aan de slag
+                    </a>
+                </header>
+            </div>
+
+            <div class="container">
+                <h2 class="section-title">Ontdek de functies</h2>
+
+                <div class="features-grid">
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">chat</span> Berichten</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> AI Verbeteraar</li>
+                            <li><span class="google-symbols">check</span> Gewoon Verbeteren</li>
+                            <li><span class="google-symbols">check</span> Formeel</li>
+                            <li><span class="google-symbols">check</span> Heel Formeel</li>
+                            <li><span class="google-symbols">check</span> AI Vertalen (Frans, Duits, Engels)</li>
+                            <li><span class="google-symbols">check</span> AI Onderwerp (Automatisch)</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">bar_chart</span> Resultaten</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> SmartBuddy Resultatenoverzicht</li>
+                            <li><span class="google-symbols">check</span> Voortgangsrapport</li>
+                            <li><span class="google-symbols">check</span> Motiverende Quotes</li>
+                            <li><span class="google-symbols">check</span> Jaartotaal</li>
+                            <li><span class="google-symbols">check</span> Kleurcodering Scores</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">calculate</span> Punten</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> Totaalberekening Lijstweergave</li>
+                            <li><span class="google-symbols">check</span> Totaalberekening Rasterweergave</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">sports_esports</span> Games</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> SmartBuddy Games Menu</li>
+                            <li><span class="google-symbols">check</span> SmartBloob.io (Multiplayer)</li>
+                            <li><span class="google-symbols">check</span> SmartWave.io (Highscore)</li>
+                            <li><span class="google-symbols">check</span> SmartPong.io (Multiplayer)</li>
+                            <li><span class="google-symbols">check</span> Globale Online Leaderboards</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">extension</span> Extra's</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> Custom SmartBuddy Login Pagina</li>
+                            <li><span class="google-symbols">check</span> Nieuw SmartBuddy Icoon (Favicon)</li>
+                            <li><span class="google-symbols">check</span> Interactieve Rondleiding</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">settings</span> Instellingen</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> Gemini API Configuratie</li>
+                            <li><span class="google-symbols">check</span> Verbeterstijl Kiezen</li>
+                            <li><span class="google-symbols">check</span> Aangepaste Thema's (Kleurenschema's)</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="step">
-                <div class="num">// 02</div>
-                <div class="step-info">
-                    <h3>Klik op "Installeren"</h3>
-                    <p>Klik simpelweg op de downloadknop en sta vervolgens de vereiste machtigingen toe in je browser.</p>
+            <div class="container" id="setup">
+                <h2 class="section-title">Hoe SmartBuddy te installeren</h2>
+
+                <div class="steps-grid">
+                    <div class="step reveal">
+                        <div class="num">01</div>
+                        <div class="step-info">
+                            <h3>Chrome Web Store</h3>
+                            <p>Ga naar de officiële Web Store en zoek naar SmartBuddy of klik direct op 
+                                <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank">SmartBuddy</a>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step reveal">
+                        <div class="num">02</div>
+                        <div class="step-info">
+                            <h3>Klik op "Installeren"</h3>
+                            <p>Klik simpelweg op de downloadknop en sta vervolgens de vereiste machtigingen toe in je browser.</p>
+                        </div>
+                    </div>
+
+                    <div class="step reveal">
+                        <div class="num">03</div>
+                        <div class="step-info">
+                            <h3>Start je Smartschool</h3>
+                            <p>Navigeer naar je eigen Smartschool-pagina en vernieuw deze. Je reis is begonnen.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="step">
-                <div class="num">// 03</div>
-                <div class="step-info">
-                    <h3>Start je Smartschool</h3>
-                    <p>Navigeer naar je eigen Smartschool-pagina en vernieuw deze. <strong>Gefeliciteerd, je reis is begonnen!</strong></p>
+            <div class="container">
+                <h2 class="section-title">Ontwikkeld door</h2>
+                <div class="team-card reveal">
+                    <h3>Developer Team</h3>
+                    <ul class="contributor-list">
+                        <li><b>Kleine_Lars</b></li>
+                        <p>CEO, Developer, Designer, Social Media Manager & Discord Administrator</p>
+                    </ul>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <h2 class="section-title">Ons team</h2>
-        <div class="team-card">
-            <h3>Developer Team</h3>
-            <ul class="contributor-list">
-                <li><b>Kleine_Lars</b></li>
-                <p>CEO, Developer, Designer, Social Media Manager & Discord Administrator</p>
-            </ul>
-        </div>
-    </div>
+        <!-- PRIVACY VIEW -->
+        <div id="privacy-view" class="view">
+            <div class="container" id="privacy">
+                <h2 class="section-title">Privacybeleid</h2>
+                <p class="privacy-date">Laatst bijgewerkt: 11 juni 2026</p>
 
-    <!-- ===== PRIVACY BELEID SECTIE ===== -->
-    <div class="container privacy-section" id="privacy">
-        <h2 class="section-title">Privacybeleid</h2>
-        <p class="privacy-date">Laatst bijgewerkt: 11 juni 2026</p>
+                <div class="privacy-summary">
+                    <span class="badge">Samenvatting</span>
+                    <p>Voor de hoofdfuncties verzamelt SmartBuddy <strong>geen persoonlijke gegevens</strong> en wordt alles lokaal opgeslagen. Bij AI-functies wordt je bericht naar Google Gemini gestuurd. Alleen wanneer je de <strong>SmartBuddy Games</strong> speelt, slaan we je gekozen in-game naam en je Smartschool-naam op in onze online database (Google Firebase) om online leaderboards en multiplayer mogelijk te maken.</p>
+                </div>
 
-        <div class="privacy-summary">
-            <span class="badge">Samenvatting</span>
-            <p>SmartGrid verzamelt <strong>geen persoonlijke gegevens</strong>. Alle instellingen worden lokaal in je browser opgeslagen. Wanneer je de AI-functies gebruikt, wordt de tekst van je bericht naar de Google Gemini API gestuurd om te verwerken. Er worden geen gegevens naar onze eigen servers gestuurd.</p>
-        </div>
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">database</span> Welke gegevens worden verzameld</h3>
+                    <p>SmartBuddy slaat de volgende gegevens <strong>lokaal</strong> op in je browser via <code>chrome.storage.sync</code> of <code>chrome.storage.local</code>:</p>
+                    <table class="privacy-table">
+                        <thead>
+                            <tr>
+                                <th>Gegeven</th>
+                                <th>Doel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Gemini API-sleutel</td>
+                                <td>Authenticatie bij de Google Gemini API voor AI-functies</td>
+                            </tr>
+                            <tr>
+                                <td>AI-verbeterstijl</td>
+                                <td>Onthouden van je voorkeur (gewoon / formeel / zeer formeel)</td>
+                            </tr>
+                            <tr>
+                                <td>Thema-instellingen</td>
+                                <td>Onthouden van je gekozen kleurenschema</td>
+                            </tr>
+                            <tr>
+                                <td>Tutorial-status</td>
+                                <td>Bijhouden of de rondleiding al getoond is</td>
+                            </tr>
+                            <tr>
+                                <td>Game Gebruikersnaam & Smartschool Naam</td>
+                                <td>Gekoppeld om een unieke spelersnaam te garanderen voor online leaderboards (opgeslagen in <code>chrome.storage.local</code> en Firebase)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>De instellingen worden <strong>uitsluitend lokaal</strong> in je browser opgeslagen. Alleen gegevens gerelateerd aan SmartBuddy Games (je gekozen naam, Smartschool-naam en topscores) worden naar een beveiligde Firebase database verstuurd.</p>
+                </div>
 
-        <div class="privacy-card">
-            <h3>// Welke gegevens worden verzameld</h3>
-            <p>SmartGrid slaat de volgende gegevens <strong>lokaal</strong> op in je browser via <code>chrome.storage.sync</code>:</p>
-            <table class="privacy-table">
-                <thead>
-                    <tr>
-                        <th>Gegeven</th>
-                        <th>Doel</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Gemini API-sleutel</td>
-                        <td>Authenticatie bij de Google Gemini API voor AI-functies</td>
-                    </tr>
-                    <tr>
-                        <td>AI-verbeterstijl</td>
-                        <td>Onthouden van je voorkeur (gewoon / formeel / zeer formeel)</td>
-                    </tr>
-                    <tr>
-                        <td>Thema-instellingen</td>
-                        <td>Onthouden van je gekozen kleurenschema</td>
-                    </tr>
-                    <tr>
-                        <td>Tutorial-status</td>
-                        <td>Bijhouden of de rondleiding al getoond is</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>Deze gegevens worden <strong>uitsluitend lokaal</strong> in je browser opgeslagen en worden <strong>nooit</strong> naar externe servers van SmartGrid verzonden.</p>
-        </div>
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">share</span> Gegevensverwerking door derden</h3>
+                    <p>Wanneer je een van de <strong>AI-functies</strong> gebruikt, wordt het volgende naar de <strong>Google Gemini API</strong> verstuurd:</p>
+                    <ul>
+                        <li><span class="google-symbols">arrow_right</span> De <strong>platte tekst</strong> van je bericht (maximaal 3.000 tekens)</li>
+                        <li><span class="google-symbols">arrow_right</span> Je <strong>Gemini API-sleutel</strong> voor authenticatie</li>
+                    </ul>
+                    <br>
+                    <p>Wanneer je <strong>SmartBuddy Games</strong> speelt, sturen we het volgende naar <strong>Google Firebase</strong> (onze online database):</p>
+                    <ul>
+                        <li><span class="google-symbols">arrow_right</span> Je gekozen spelersnaam en je echte Smartschool-naam</li>
+                        <li><span class="google-symbols">arrow_right</span> Je behaalde topscores</li>
+                    </ul>
+                    <br>
+                    <p>Beide diensten worden verwerkt door <strong>Google LLC</strong> volgens hun eigen privacybeleid: <a href="https://policies.google.com/privacy" target="_blank">Google Privacybeleid</a>.</p>
+                    <p>SmartBuddy maakt uitsluitend gebruik van de veilige Google-infrastructuur (Gemini & Firebase) en deelt geen gegevens met andere externe partijen.</p>
+                </div>
 
-        <div class="privacy-card">
-            <h3>// Gegevensverwerking door derden</h3>
-            <p>Wanneer je een van de <strong>AI-functies</strong> gebruikt (AI Verbeteraar, AI Vertaler of AI Onderwerp), wordt het volgende naar de <strong>Google Gemini API</strong> verstuurd:</p>
-            <ul>
-                <li>De <strong>platte tekst</strong> van je bericht (maximaal 3.000 tekens)</li>
-                <li>Je <strong>Gemini API-sleutel</strong> voor authenticatie</li>
-            </ul>
-            <p>Deze gegevens worden verwerkt door <strong>Google LLC</strong> volgens hun eigen privacybeleid: <a href="https://policies.google.com/privacy" target="_blank">Google Privacybeleid</a>.</p>
-            <p>SmartGrid heeft <strong>geen eigen servers</strong> en verstuurt geen gegevens naar andere partijen dan Google.</p>
-        </div>
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">block</span> Gegevens die NIET worden verzameld</h3>
+                    <p>SmartBuddy verzamelt <strong>geen</strong>:</p>
+                    <ul>
+                        <li><span class="google-symbols">close</span> Persoonlijke identificatiegegevens (naam, e-mailadres, etc.)</li>
+                        <li><span class="google-symbols">close</span> Browsegeschiedenis of surfgedrag</li>
+                        <li><span class="google-symbols">close</span> Schoolresultaten of cijfers (deze worden alleen lokaal in je browser weergegeven)</li>
+                        <li><span class="google-symbols">close</span> Inloggegevens van Smartschool</li>
+                        <li><span class="google-symbols">close</span> Cookies of tracking-gegevens</li>
+                        <li><span class="google-symbols">close</span> Analytische of diagnostische gegevens</li>
+                    </ul>
+                </div>
 
-        <div class="privacy-card">
-            <h3>// Gegevens die NIET worden verzameld</h3>
-            <p>SmartGrid verzamelt <strong>geen</strong>:</p>
-            <ul>
-                <li>Persoonlijke identificatiegegevens (naam, e-mailadres, etc.)</li>
-                <li>Browsegeschiedenis of surfgedrag</li>
-                <li>Schoolresultaten of cijfers (deze worden alleen lokaal in je browser weergegeven)</li>
-                <li>Inloggegevens van Smartschool</li>
-                <li>Cookies of tracking-gegevens</li>
-                <li>Analytische of diagnostische gegevens</li>
-            </ul>
-        </div>
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">storage</span> Hoe gegevens worden opgeslagen</h3>
+                    <p>Alle instellingen worden opgeslagen via de <strong>Chrome Storage API</strong>. Dit betekent:</p>
+                    <ul>
+                        <li><span class="google-symbols">arrow_right</span> Gegevens worden <strong>lokaal</strong> in je browser opgeslagen</li>
+                        <li><span class="google-symbols">arrow_right</span> Als je bent ingelogd op Chrome, worden sync-instellingen gesynchroniseerd tussen je apparaten via je Google-account</li>
+                        <li><span class="google-symbols">arrow_right</span> Gegevens worden automatisch verwijderd wanneer je de extensie verwijdert</li>
+                        <li><span class="google-symbols">arrow_right</span> Je kunt alle gegevens handmatig wissen via de extensie-instellingen in Chrome</li>
+                    </ul>
+                </div>
 
-        <div class="privacy-card">
-            <h3>// Hoe gegevens worden opgeslagen</h3>
-            <p>Alle instellingen worden opgeslagen via de <strong>Chrome Storage Sync API</strong>. Dit betekent:</p>
-            <ul>
-                <li>Gegevens worden <strong>lokaal</strong> in je browser opgeslagen</li>
-                <li>Als je bent ingelogd op Chrome, worden instellingen gesynchroniseerd tussen je apparaten via je Google-account</li>
-                <li>Gegevens worden automatisch verwijderd wanneer je de extensie verwijdert</li>
-                <li>Je kunt alle gegevens handmatig wissen via de extensie-instellingen in Chrome</li>
-            </ul>
-        </div>
-
-        <div class="privacy-card">
-            <h3>// Gegevens delen met derden</h3>
-            <p>SmartGrid deelt gegevens met <strong>één derde partij</strong>:</p>
-            <p><strong>Google LLC (Gemini API)</strong> — Alleen wanneer je actief een AI-functie gebruikt, wordt de tekst van je bericht naar de Google Gemini API gestuurd. Dit gebeurt <strong>alleen op jouw verzoek</strong> (door op een AI-knop te klikken) en nooit automatisch op de achtergrond.</p>
-            <p>Er worden <strong>geen gegevens</strong> gedeeld met andere partijen, adverteerders, databrokers of analyse-diensten.</p>
-        </div>
-
-        <div class="privacy-card">
-            <h3>// Toestemming en controle</h3>
-            <ul>
-                <li>De AI-functies werken <strong>alleen</strong> als je zelf een API-sleutel instelt</li>
-                <li>Berichttekst wordt <strong>alleen</strong> verstuurd wanneer jij op een AI-knop klikt</li>
-                <li>Je kunt je API-sleutel op elk moment verwijderen via de SmartGrid-instellingen</li>
-                <li>Je kunt alle opgeslagen gegevens wissen via <strong>chrome://extensions</strong> → SmartGrid → Gegevens wissen</li>
-            </ul>
-        </div>
-
-        <div class="privacy-card">
-            <h3>// Kinderen</h3>
-            <p>SmartGrid is geschikt voor gebruik door scholieren. De extensie verzamelt geen persoonlijke gegevens van kinderen en voldoet aan de vereisten voor bescherming van minderjarigen.</p>
-        </div>
-
-        <div class="privacy-card">
-            <h3>// Wijzigingen</h3>
-            <p>Bij wijzigingen in dit privacybeleid wordt de datum "Laatst bijgewerkt" bovenaan aangepast. Belangrijke wijzigingen worden ook meegedeeld in de update-opmerkingen van de extensie.</p>
-        </div>
-
-        <div class="privacy-card">
-            <h3>// Contact</h3>
-            <p>Heb je vragen over dit privacybeleid? Neem contact op via het ondersteuningsformulier op de <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank">Chrome Web Store-pagina</a> van SmartGrid of via onze <a href="https://discord.gg/CkeXqXpQGa" target="_blank">Discord server</a>.</p>
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">admin_panel_settings</span> Toestemming en controle</h3>
+                    <ul>
+                        <li><span class="google-symbols">check_circle</span> De AI-functies werken <strong>alleen</strong> als je zelf een API-sleutel instelt</li>
+                        <li><span class="google-symbols">check_circle</span> Berichttekst wordt <strong>alleen</strong> verstuurd wanneer jij op een AI-knop klikt</li>
+                        <li><span class="google-symbols">check_circle</span> Je kunt je API-sleutel op elk moment verwijderen via de SmartBuddy-instellingen</li>
+                        <li><span class="google-symbols">check_circle</span> Je kunt alle opgeslagen gegevens wissen via <strong>chrome://extensions</strong></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
     <footer>
-        © 2026 SmartGrid • Built by <b>Kleine_Lars</b> • <a href="#privacy">Privacybeleid</a>
+        &copy; 2026 SmartBuddy • Built by <b>Kleine_Lars</b> • <a onclick="showPrivacy(event)">Privacybeleid</a>
     </footer>
 
     <script>
         function toggleLock(element) {
-            // Voegt de 'locked' class toe of verwijdert deze bij een klik
             element.classList.toggle('locked');
         }
+
+        function showHome(e, targetId = null) {
+            if (e) e.preventDefault();
+            document.getElementById('privacy-view').classList.remove('active');
+            document.getElementById('home-view').classList.add('active');
+            
+            if (targetId) {
+                setTimeout(() => {
+                    const el = document.querySelector(targetId);
+                    if (el) {
+                        const y = el.getBoundingClientRect().top + window.scrollY - 20;
+                        window.scrollTo({top: y, behavior: 'smooth'});
+                    }
+                }, 100);
+            } else {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+
+        function showPrivacy(e) {
+            if (e) e.preventDefault();
+            document.getElementById('home-view').classList.remove('active');
+            document.getElementById('privacy-view').classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#privacy') {
+                showPrivacy();
+            } else if (window.location.hash === '#setup') {
+                showHome(null, '#setup');
+            }
+
+            // Init Scroll Animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+        });
     </script>
 </body>
 </html>
