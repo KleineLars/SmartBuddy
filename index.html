@@ -474,7 +474,7 @@
         <div id="home-view" class="view active">
             <div class="container">
                 <header>
-                    <h1>SmartBuddy</h1>
+                    <h1>SmartBuddy — Build the new way</h1>
                     <p class="tagline">
                         Ervaar Smartschool als nooit tevoren. Met de naadloze integratie van AI-tools, verbeterde weergaves en multiplayer games transformeert SmartBuddy jouw schoolervaring tot een productieve en plezierige omgeving.
                     </p>
@@ -531,15 +531,27 @@
 
                     <div class="feature-card reveal" onclick="toggleLock(this)">
                         <div class="feature-header">
+                            <h3><span class="google-symbols">forum</span> SmartChat</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> Realtime Algemene Chatroom</li>
+                            <li><span class="google-symbols">check</span> Berichten Sturen & Ontvangen</li>
+                            <li><span class="google-symbols">check</span> In Contact Met Medeleerlingen</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
                             <h3><span class="google-symbols">sports_esports</span> Games</h3>
                             <span class="google-symbols dropdown-icon">expand_more</span>
                         </div>
                         <ul class="feature-list">
                             <li><span class="google-symbols">check</span> SmartBuddy Games Menu</li>
                             <li><span class="google-symbols">check</span> SmartBloob.io (Multiplayer)</li>
-                            <li><span class="google-symbols">check</span> SmartWave.io (Highscore)</li>
+                            <li><span class="google-symbols">check</span> SmartWave.io (Geoptimaliseerde UI)</li>
                             <li><span class="google-symbols">check</span> SmartPong.io (Multiplayer)</li>
-                            <li><span class="google-symbols">check</span> Globale Online Leaderboards</li>
+                            <li><span class="google-symbols">check</span> Globale Online Leaderboards (Hoofdmenu)</li>
                         </ul>
                     </div>
 
@@ -552,18 +564,6 @@
                             <li><span class="google-symbols">check</span> Custom SmartBuddy Login Pagina</li>
                             <li><span class="google-symbols">check</span> Nieuw SmartBuddy Icoon (Favicon)</li>
                             <li><span class="google-symbols">check</span> Interactieve Rondleiding</li>
-                        </ul>
-                    </div>
-
-                    <div class="feature-card reveal" onclick="toggleLock(this)">
-                        <div class="feature-header">
-                            <h3><span class="google-symbols">settings</span> Instellingen</h3>
-                            <span class="google-symbols dropdown-icon">expand_more</span>
-                        </div>
-                        <ul class="feature-list">
-                            <li><span class="google-symbols">check</span> Gemini API Configuratie</li>
-                            <li><span class="google-symbols">check</span> Verbeterstijl Kiezen</li>
-                            <li><span class="google-symbols">check</span> Aangepaste Thema's (Kleurenschema's)</li>
                         </ul>
                     </div>
                 </div>
@@ -636,10 +636,6 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Gemini API-sleutel</td>
-                                <td>Authenticatie bij de Google Gemini API voor AI-functies</td>
-                            </tr>
-                            <tr>
                                 <td>AI-verbeterstijl</td>
                                 <td>Onthouden van je voorkeur (gewoon / formeel / zeer formeel)</td>
                             </tr>
@@ -665,7 +661,6 @@
                     <p>Wanneer je een van de <strong>AI-functies</strong> gebruikt, wordt het volgende naar de <strong>Google Gemini API</strong> verstuurd:</p>
                     <ul>
                         <li><span class="google-symbols">arrow_right</span> De <strong>platte tekst</strong> van je bericht (maximaal 3.000 tekens)</li>
-                        <li><span class="google-symbols">arrow_right</span> Je <strong>Gemini API-sleutel</strong> voor authenticatie</li>
                     </ul>
                     <br>
                     <p>Wanneer je <strong>SmartBuddy Games</strong> speelt, sturen we het volgende naar <strong>Google Firebase</strong> (onze online database):</p>
@@ -705,9 +700,8 @@
                 <div class="privacy-card">
                     <h3><span class="google-symbols">admin_panel_settings</span> Toestemming en controle</h3>
                     <ul>
-                        <li><span class="google-symbols">check_circle</span> De AI-functies werken <strong>alleen</strong> als je zelf een API-sleutel instelt</li>
+                        <li><span class="google-symbols">check_circle</span> De AI-functies maken nu gebruik van een veilig ingebouwde API-sleutel</li>
                         <li><span class="google-symbols">check_circle</span> Berichttekst wordt <strong>alleen</strong> verstuurd wanneer jij op een AI-knop klikt</li>
-                        <li><span class="google-symbols">check_circle</span> Je kunt je API-sleutel op elk moment verwijderen via de SmartBuddy-instellingen</li>
                         <li><span class="google-symbols">check_circle</span> Je kunt alle opgeslagen gegevens wissen via <strong>chrome://extensions</strong></li>
                     </ul>
                 </div>
