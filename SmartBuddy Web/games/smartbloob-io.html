@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SmartBloob.io</title>
+<style>
+:root {
+  --sg-accent: #FF520E;
+  --sg-base01: #0a0a0a;
+  --sg-base02: #0f0f0f;
+  --sg-border: rgba(255,255,255,0.06);
+  --sg-text: #ffffff;
+  --sg-muted: #888888;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--sg-base01); font-family: 'Inter', system-ui, -apple-system, sans-serif; overflow: hidden; color: var(--sg-text); touch-action: none; }
+canvas { display: block; cursor: crosshair; }
+
+/* ?? HUD ?? */
+#ui { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+
+#hud-score { position: absolute; top: 24px; right: 24px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+#score-val { font-size: clamp(32px, 4vw, 56px); font-weight: 900; letter-spacing: -0.03em; background: #333333; color: #ffffff;   }
+#mass-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--sg-muted); font-weight: 600; }
+#rank-val { font-size: 13px; letter-spacing: 2px; padding: 6px 16px; border: 1px solid rgba(255, 82, 14, 0.3); border-radius: 24px; background: rgba(255, 82, 14, 0.1); color: #ffffff; font-weight: 700;   }
+
+/* Leaderboard */
+#leaderboard { position: absolute; top: 24px; left: 24px; background: #111111;  -webkit- border: 1px solid var(--sg-border); border-radius: 20px; padding: 20px 24px; min-width: 220px;  }
+#leaderboard h3 { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: #ffffff; margin-bottom: 16px; font-weight: 800; border-bottom: 1px solid var(--sg-border); padding-bottom: 12px; }
+.lb-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 13px; font-weight: 600; }
+.lb-rank { color: var(--sg-muted); font-size: 11px; width: 18px; font-weight: 800; }
+.lb-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;  }
+.lb-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lb-mass { color: var(--sg-muted); font-size: 11px; font-weight: 700; }
+.lb-row.is-me { color: #ffffff; }
+.lb-row.is-me .lb-name, .lb-row.is-me .lb-mass { color: #ffffff; }
+
+/* Minimap */
+#minimap { position: absolute; bottom: 24px; right: 24px; width: 150px; height: 150px; border-radius: 16px; border: 1px solid var(--sg-border); overflow: hidden; background: #111111;   }
+#minimap-cv { width: 100%; height: 100%; }
+
+/* Controls */
+#ctrl-hint { position: absolute; bottom: 24px; left: 24px; font-size: 11px; letter-spacing: 1px; color: var(--sg-muted); line-height: 2; font-weight: 500; }
+#abilities { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; }
+.ab-key { background: #1a1a1a;  border: 1px solid var(--sg-border); border-radius: 14px; padding: 10px 20px; display: flex; flex-direction: column; align-items: center; gap: 4px;  }
+.ab-key .k { font-size: 15px; font-weight: 800; color: #ffffff; }
+.ab-key .l { font-size: 10px; letter-spacing: 2px; color: var(--sg-muted); text-transform: uppercase; font-weight: 600; }
+
+/* ?? Screens ?? */
+.screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; pointer-events: all; padding: 24px; text-align: center; }
+#start-screen { background: #0a0a0a;  }
+#start-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+#start-content { position: relative; z-index: 1; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 50px 40px; width: 600px; max-width: 90vw; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
+
+.game-title { font-size: clamp(48px, 10vw, 80px); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 8px; line-height: 1; }
+.game-title .t1 { color: #fff; }
+.game-title .t2 { color: #FF520E; }
+.game-sub { font-size: clamp(14px, 2vw, 18px); letter-spacing: 6px; text-transform: uppercase; color: var(--sg-muted); margin-bottom: 48px; font-weight: 600; }
+
+.name-input { background: rgba(0, 0, 0, 0.2);  border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 18px 32px; font-size: 18px; font-weight: 600; color: var(--sg-text); letter-spacing: 1px; text-align: center; width: 100%; box-sizing: border-box; outline: none; font-family: inherit; margin-bottom: 32px; transition: all 0.3s ease; }
+.name-input:focus { border-color: #ffffff; background: rgba(0,0,0,0.4);  }
+.name-input::placeholder { color: var(--sg-muted); opacity: 0.5; }
+
+.color-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--sg-muted); margin-bottom: 16px; font-weight: 700; }
+.color-row { display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; justify-content: center; }
+.color-btn { width: 44px; height: 44px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);  }
+.color-btn:hover { transform: scale(1.15); }
+.color-btn.active { border-color: #ffffff; transform: scale(1.2);  }
+
+.play-btn { background: #444444; border: 1px solid #666; border-radius: 8px; padding: 16px 48px; font-size: 18px; font-weight: bold; color: #ffffff; cursor: pointer; width: 100%; box-sizing: border-box; }
+.play-btn:hover { background: #555555; }
+.play-btn:active { background: #333333; }
+.play-btn:hover { transform: translateY(-2px); }
+.play-btn:active { transform: translateY(2px) scale(0.98); }
+
+/* Online teller */
+.online-count { margin-top: 32px; font-size: 13px; color: var(--sg-muted); display: flex; align-items: center; gap: 8px; justify-content: center; font-weight: 500; }
+.online-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e;  animation: pulseGreen 2s ease-in-out infinite; }
+@keyframes pulseGreen { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.5; transform: scale(0.8); } }
+
+/* Death screen */
+#death-screen { background: rgba(5, 5, 5, 0.9);  }
+.death-title { font-size: clamp(48px, 10vw, 80px); font-weight: 900; letter-spacing: -0.03em; color: #ef4444; margin-bottom: 16px;  }
+.death-stats { font-size: 18px; color: var(--sg-text); opacity: 0.8; line-height: 2; margin-bottom: 40px; font-weight: 500; }
+.death-stats strong { color: #ffffff; font-weight: 800; font-size: 22px; }
+
+.hidden { display: none !important; }
+
+/* Toast message */
+#toast { position: fixed; top: 32px; left: 50%; transform: translateX(-50%) translateY(-20px); background: rgba(15, 15, 17, 0.9);  border: 1px solid var(--sg-accent); color: var(--sg-text); padding: 14px 32px; border-radius: 16px; font-size: 15px; font-weight: 600; letter-spacing: 0.5px; z-index: 9000; pointer-events: none; opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);  }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Mobile */
+#joystick-zone { position: fixed; inset: 0; width: 50%; z-index: 50; display: none; pointer-events: auto; }
+#joystick-base { position: absolute; width: 140px; height: 140px; border-radius: 50%; border: 2px solid rgba(255, 82, 14, 0.2); background: transparent;  display: none; transform: translate(-50%,-50%);  }
+#joystick-knob { position: absolute; width: 60px; height: 60px; border-radius: 50%; background: #333333; color: #ffffff; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none;  }
+#mobile-btns { position: fixed; bottom: 0; right: 0; width: 150px; height: 260px; z-index: 50; display: none; pointer-events: none; }
+.mob-btn { position: absolute; border-radius: 50%; background: #1a1a1a; border: 2px solid var(--sg-accent);   display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; letter-spacing: 1px; color: #ffffff; user-select: none; pointer-events: auto; transition: all 0.2s; text-transform: uppercase; }
+.mob-btn:active { background: #333333; color: #ffffff; color: #fff; transform: scale(0.95); }
+#btn-split { width: 100px; height: 100px; bottom: 140px; right: 24px; }
+#btn-eject { width: 100px; height: 100px; bottom: 24px; right: 24px; font-size: 20px; }
+@media (pointer:coarse) {
+  #joystick-zone, #mobile-btns { display: block; }
+  #ctrl-hint, #abilities { display: none; }
+  #leaderboard { font-size: 11px; padding: 12px 16px; min-width: 140px; top: 16px; left: 16px; }
+  #minimap { width: 100px; height: 100px; top: 16px; right: 16px; bottom: auto; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="gc"></canvas>
+
+<!-- HUD -->
+<div id="ui">
+  <div id="hud-score">
+    <div id="score-val">0</div>
+    <div id="mass-label">Massa</div>
+    <div id="rank-val">Rang #?</div>
+  </div>
+  <div id="leaderboard">
+    <h3> Ranglijst</h3>
+    <div id="lb-list"></div>
+  </div>
+  <div id="minimap"><canvas id="minimap-cv" width="130" height="130"></canvas></div>
+  <div id="ctrl-hint">SPATIE — Splitsen<br>W / Z — Sprint / Boost<br>Muis — Bewegen</div>
+  <div id="abilities">
+    <div class="ab-key"><span class="k">W / Z</span><span class="l">Boost</span></div>
+    <div class="ab-key"><span class="k">SPATIE</span><span class="l">Splitsen</span></div>
+  </div>
+</div>
+
+<!-- Start -->
+<div id="start-screen" class="screen">
+  <canvas id="start-bg"></canvas>
+  <div id="start-content">
+    <div class="game-title" style="color: #fff;"><span class="t1">Smart</span><span class="t2">Bloob.io</span></div>
+    <div class="game-sub" style="font-size: 14px; letter-spacing: 2px; color: #888; margin-bottom: 30px; text-transform: uppercase;">Multiplayer Arena</div>
+    <div class="color-label">Kies je kleur</div>
+    <div class="color-row" id="color-row"></div>
+    <br>
+    <button class="play-btn" id="play-btn"> SPELEN</button>
+    <div class="online-count"><span class="online-dot"></span> <span id="online-num">0</span> online</div>
+  </div>
+</div>
+
+<!-- Death -->
+<div id="death-screen" class="screen hidden">
+  <div class="death-title"> OPGEGETEN!</div>
+  <div class="death-stats" id="death-stats"></div>
+  <button class="play-btn" id="respawn-btn"> Opnieuw Spelen</button>
+</div>
+
+<!-- Joystick + Mobile -->
+<div id="joystick-zone"><div id="joystick-base"><div id="joystick-knob"></div></div></div>
+<div id="mobile-btns">
+  <div class="mob-btn" id="btn-split">SPLIT</div>
+  <div class="mob-btn" id="btn-eject">BOOST</div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="../static/js/firebase-app-compat.js"></script>
+<script src="../static/js/firebase-database-compat.js"></script>
+<script src="../static/js/firebase-config.js"></script>
+
+<script src="smartbloob-io.js"></script>
+</body>
+</html>
+
+
