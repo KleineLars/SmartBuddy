@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBuddy Games</title>
+    <link rel="stylesheet" href="games.css">
+    <style>
+      /* Ensure the background is transparent */
+      body { background-color: transparent !important; }
+    </style>
+</head>
+<body>
+    <div id="sg-games-overlay" class="sg-visible">
+        <div id="sg-games-backdrop"></div>
+      <div id="sg-games-content">
+        <button id="sg-games-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6L18 18"></path></svg>
+        </button>
+        <button id="sg-mod-btn" title="Mod Menu" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </button>
+        <button id="sg-settings-btn" title="Instellingen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+        <button id="sg-chat-btn" title="SmartBuddy Chat">
+          <span class="sg-chat-status-dot sg-status-red"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </button>
+
+        <div id="sg-name-modal-overlay">
+          <div id="sg-name-modal">
+            <h2>Jouw Username</h2>
+            <p>Kies een username voor op de leaderboards. Je kunt deze naam maar <strong>één keer per 30 dagen</strong> wijzigen.</p>
+            <div id="sg-name-error"></div>
+            <input type="text" id="sg-name-input" placeholder="Je naam (max 20 tekens)" maxlength="20" autocomplete="off">
+            <button id="sg-name-save">Opslaan & Spelen</button>
+            <button id="sg-name-close">Annuleren</button>
+          </div>
+        </div>
+        
+        <div id="sg-apikey-modal-overlay">
+          <div id="sg-apikey-modal">
+            <div class="sg-apikey-header">
+              <h2>Welkom bij SmartBuddy Games!</h2>
+              <p>Om toegang te krijgen tot de veilige multiplayer games en AI-chatfuncties, moet je eenmalig een <strong>Gemini API-sleutel</strong> instellen.</p>
+            </div>
+            
+            <div class="sg-apikey-layout">
+              <div class="sg-apikey-guide">
+                <h3>Hoe maak je een API sleutel? (Duurt 1 minuut)</h3>
+                <ol class="sg-apikey-steps">
+                  <li>Ga naar <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a>.</li>
+                  <li>Log in met je Google-account.</li>
+                  <li>Klik op de blauwe knop <strong>"Create API key"</strong>.</li>
+                  <li>Kies <strong>"Create API key in new project"</strong>.</li>
+                  <li>Kopieer de gegenereerde sleutel (begint meestal met <code>AIza...</code>).</li>
+                </ol>
+              </div>
+              
+              <div class="sg-apikey-form">
+                <h3>Vul je sleutel in</h3>
+                <div id="sg-apikey-error"></div>
+                <input type="text" id="sg-apikey-input" placeholder="Plak hier je AIza... sleutel" autocomplete="off" spellcheck="false" data-1p-ignore="true" data-lpignore="true">
+                <button id="sg-apikey-save" class="sg-btn-primary" style="width: 100%; padding: 16px; margin-top: 24px; border-radius: 12px; font-weight: 600;">Opslaan & Spelen</button>
+            </div>
+          </div>
+        </div>
+        </div>
+        
+        <div id="sg-games-list-view" style="transition: opacity 0.3s ease; opacity: 1; display: block;">
+          <div class="sg-games-header">
+            <div class="sg-games-title">Smart<span>Buddy</span> Games</div>
+            <div class="sg-games-subtitle">Speel multiplayer games via Smartschool.</div>
+          </div>
+
+          <div class="sg-games-grid">
+            <!-- SmartBloob.io -->
+            <div class="sg-game-card" id="sg-card-smartbloob-io">
+              <div class="sg-game-preview-container">
+                <canvas class="sg-game-preview" id="sg-preview-SmartBuddy-io"></canvas>
+                <div class="sg-game-preview-overlay"></div>
+              </div>
+              <div class="sg-game-info">
+                <div class="sg-badges-row">
+                  <span class="sg-game-badge sg-badge-live" id="sg-badge-smartbloob"><div class="sg-live-dot"></div> <span class="sg-player-text">0 spelers</span></span>
+                </div>
+                <div class="sg-game-name">SmartBloob.io</div>
+                <div class="sg-game-desc">Multiplayer agar.io-achtige game. Groei door cellen te eten en speel tegen anderen.</div>
+                <button class="sg-game-play-btn" id="sg-play-smartbloob-io">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5V19L19 12L8 5Z"></path></svg>
+                  Spelen
+                </button>
+              </div>
+            </div>
+
+            <!-- SmartWave.io -->
+            <div class="sg-game-card" id="sg-card-smartwave-io">
+              <div class="sg-game-preview-container">
+                <canvas class="sg-game-preview" id="sg-preview-smartwave-io"></canvas>
+                <div class="sg-game-preview-overlay"></div>
+              </div>
+              <div class="sg-game-info">
+                <div class="sg-badges-row">
+                  <span class="sg-game-badge sg-badge-live" id="sg-badge-smartwave" style="background: rgba(45, 212, 191, 0.1); color: #2dd4bf; border-color: rgba(45, 212, 191, 0.2);"><div class="sg-live-dot" style="background: #2dd4bf; animation: none;"></div> <span class="sg-player-text">Singleplayer</span></span>
+                </div>
+                <div class="sg-game-name">SmartWave.io</div>
+                <div class="sg-game-desc">Behendigheidsgame in de ruimte. Stuur je golf door obstakels door te klikken. Haal de hoogste score!</div>
+                <button class="sg-game-play-btn" id="sg-play-smartwave-io" style="background: #2dd4bf; color: #1a1a1a;">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5V19L19 12L8 5Z"></path></svg>
+                  Spelen
+                </button>
+              </div>
+            </div>
+
+            <!-- SmartPong.io -->
+            <div class="sg-game-card" id="sg-card-smartpong-io">
+              <div class="sg-game-preview-container">
+                <canvas class="sg-game-preview" id="sg-preview-smartpong-io"></canvas>
+                <div class="sg-game-preview-overlay"></div>
+              </div>
+              <div class="sg-game-info">
+                <div class="sg-badges-row">
+                  <span class="sg-game-badge sg-badge-live" id="sg-badge-smartpong" style="background: rgba(236, 72, 153, 0.1); color: #ec4899; border-color: rgba(236, 72, 153, 0.2);"><div class="sg-live-dot" style="background: #ec4899; animation: pulseGreen 2s ease-in-out infinite;"></div> <span class="sg-player-text">0 spelers</span></span>
+                </div>
+                <div class="sg-game-name">SmartPong.io</div>
+                <div class="sg-game-desc">Neon Table Tennis! Speel tegen de computer of daag je vrienden online uit in een snelle pot Pong.</div>
+                <button class="sg-game-play-btn" id="sg-play-smartpong-io" style="background: #ec4899; color: #ffffff;">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M8 5V19L19 12L8 5Z"></path></svg>
+                  Spelen
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div id="sg-games-chat-view" style="transition: opacity 0.3s ease; opacity: 0; display: none; height: 700px; max-height: 85vh; width: 100%; border-radius: 24px; overflow: hidden;">
+          <iframe id="sg-chat-inline-iframe" src="" style="width: 100%; height: 100%; border: none; border-radius: 24px;"></iframe>
+        </div>
+
+          </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+    <script src="games.js"></script>
+</body>
+</html>
