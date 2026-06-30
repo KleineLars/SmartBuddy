@@ -1,0 +1,51 @@
+// ═══════════════════════════════════════════════════════════
+// SmartBuddy Games — Games knop in Smartschool topnav
+// ═══════════════════════════════════════════════════════════
+(function () {
+  if (document.getElementById('SmartBuddy-games-btn')) return;
+
+  const chrome = (function () {
+    const orig = window.chrome;
+    if (!orig) return undefined;
+    const isContextValid = () => {
+      try { return !!orig.runtime?.id; } catch { return false; }
+    };
+    const handler = {
+      get(target, prop) {
+        if (!isContextValid()) {
+          window.location.reload();
+          throw new Error("Extension context invalidated");
+        }
+        const val = target[prop];
+        if (typeof val === 'function') {
+          return val.bind(target);
+        }
+        if (typeof val === 'object' && val !== null) {
+          return new Proxy(val, handler);
+        }
+        return val;
+      }
+    };
+    return new Proxy(orig, handler);
+  })();
+
+
+  function waitForTopnav(callback) {
+    const nav = document.querySelector('.topnav');
+    if (nav) return callback(nav);
+    const observer = new MutationObserver(() => {
+      const nav = document.querySelector('.topnav');
+      if (nav) { observer.disconnect(); callback(nav); }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  
+  function injectStyles() {
+    const style = document.createElement('style');
+    style.id = 'SmartBuddy-games-styles';
+    style.textContent = `
+/* iFrame adjustments */
+body, html { margin: 0; padding: 0; overflow: hidden; background: transparent; }
+#sg-games-backdrop { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px); }
+#sg-games-overlay { display: flex; opacity: 1; visibility: visible; }
