@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBuddy Moderatiepaneel</title>
+    <style>
+        
+        :root {
+            --primary: #FF520E;
+            --bg: #f5f5f5;
+            --surface: #ffffff;
+            --text: #1a1a1a;
+            --text-muted: rgba(0,0,0,0.5);
+            --border: rgba(0,0,0,0.08);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 40px 20px;
+            background: var(--surface);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 32px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title h1 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .title p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .search-box {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 15px;
+            width: 250px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255,82,14,0.1);
+        }
+
+        .content {
+            padding: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(0,0,0,0.02);
+            padding: 16px 40px;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:hover {
+            background: rgba(0,0,0,0.01);
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .status-banned { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .status-timeout { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn:hover { background: rgba(0,0,0,0.05); }
+        .btn-danger { color: var(--danger); border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05); }
+        .btn-danger:hover { background: rgba(239, 68, 68, 0.1); }
+        
+        /* Modal */
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        #modal-overlay.visible { display: flex; }
+
+        .modal {
+            background: var(--surface);
+            padding: 32px;
+            border-radius: 20px;
+            width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal h2 { margin: 0 0 16px 0; font-size: 20px; }
+        .modal p { color: var(--text-muted); margin-bottom: 24px; font-size: 14px; }
+        
+        .modal-form-group {
+            margin-bottom: 16px;
+        }
+        .modal-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .modal-form-group select, .modal-form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .btn-primary { background: var(--primary); color: white; border: none; }
+        .btn-primary:hover { background: #e0480c; }
+        
+        #loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        
+        #unauthorized {
+            display: none;
+            text-align: center;
+            padding: 100px 40px;
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="unauthorized">
+        <h2>Geen Toegang</h2>
+        <p>Je bent geen admin en hebt geen toegang tot dit paneel.</p>
+    </div>
+
+    <div class="container" id="main-app" style="display: none;">
+        <div class="header">
+            <div class="title">
+                <h1>SmartBuddy Moderatie</h1>
+                <p>Beheer spelers, deel timeouts uit en weiger toegang.</p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button class="btn" id="manage-status-btn" style="display: none; background: #fee2e2; color: #dc2626; border-color: #fecaca;">Noodstop (Killswitch)</button>
+                <button class="btn" id="manage-roles-btn" style="display: none; background: #e0e7ff; color: #4338ca; border-color: #c7d2fe;">Rollen Beheren</button>
+                <input type="text" class="search-box" id="search-input" placeholder="Zoek een speler...">
+            </div>
+        </div>
+        
+        <div class="content">
+            <div id="loading">Gebruikers laden...</div>
+            <table id="users-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Speler</th>
+                        <th>Rol</th>
+                        <th>Status</th>
+                        <th>Acties</th>
+                    </tr>
+                </thead>
+                <tbody id="users-tbody">
+                    <!-- Rijen worden via JS geladen -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Timeout Modal -->
+    <div id="modal-overlay">
+        <div class="modal">
+            <h2 id="modal-title">Timeout uitdelen</h2>
+            <p id="modal-desc">Kies hoelang en voor welke game de timeout geldt.</p>
+            
+            <div class="modal-form-group">
+                <label>Welke game?</label>
+                <select id="timeout-game">
+                    <option value="all">Alle games & Chat</option>
+                    <option value="SmartBloob-io">SmartBloob.io</option>
+                    <option value="smartwave-io">SmartWave.io</option>
+                    <option value="smartpong-io">SmartPong.io</option>
+                </select>
+            </div>
+            
+            <div class="modal-form-group">
+                <label>Duur (in uren)</label>
+                <input type="number" id="timeout-duration" value="1" min="1" max="8760">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn" id="modal-cancel">Annuleren</button>
+                <button class="btn btn-primary" id="modal-confirm">Bevestigen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roles Management Modal -->
+    <div id="roles-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 1000;">
+        <div class="modal" style="background: var(--surface); padding: 32px; border-radius: 20px; width: 600px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.15); max-height: 90vh; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="margin: 0;">Rollen Beheren</h2>
+                <button class="btn" id="roles-modal-close">Sluiten</button>
+            </div>
+            
+            <div style="display: flex; gap: 24px; flex: 1; overflow: hidden;">
+                <!-- Nieuwe Rol Aanmaken -->
+                <div style="flex: 1; border-right: 1px solid var(--border); padding-right: 24px; overflow-y: auto;">
+                    <h3 style="font-size: 16px; margin-top: 0;">Nieuwe Rol</h3>
+                    <div class="modal-form-group">
+                        <label>Naam Rol (bijv. Admin, VIP)</label>
+                        <input type="text" id="role-name" placeholder="Admin">
+                    </div>
+                    <div class="modal-form-group">
+                        <label>Kleur (Hex code, bijv. #FF0000)</label>
+                        <input type="color" id="role-color" value="#FF520E" style="height: 40px; padding: 4px;">
+                    </div>
+                    
+                    <h4 style="font-size: 14px; margin: 20px 0 10px 0;">Toegang Moderatiepaneel</h4>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 14px; cursor: pointer;">
+                        <input type="checkbox" id="role-mod-games"> Games (Timeouts, Bans)
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px; font-size: 14px; cursor: pointer;">
+                        <input type="checkbox" id="role-mod-chat"> Chat (Berichten verwijderen)
+                    </label>
+                    
+                    <button class="btn btn-primary" id="role-create-btn" style="width: 100%;">Rol Aanmaken</button>
+                </div>
+                
+                <!-- Bestaande Rollen Lijst -->
+                <div style="flex: 1; overflow-y: auto;">
+                    <h3 style="font-size: 16px; margin-top: 0;">Bestaande Rollen</h3>
+                    <div id="roles-list-container" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- JS injecteert rollen hier -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ban Modal -->
+    <div id="ban-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 1000;">
+        <div class="modal" style="background: var(--surface); padding: 32px; border-radius: 20px; width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+            <h2>Speler Verbannen</h2>
+            <p id="ban-modal-desc">Geef een reden voor de permanente ban.</p>
+            
+            <div class="modal-form-group">
+                <label>Reden</label>
+                <input type="text" id="ban-reason" placeholder="bijv. Valsspelen, grof taalgebruik...">
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                <button class="btn" id="ban-modal-cancel">Annuleren</button>
+                <button class="btn btn-danger" id="ban-modal-confirm" style="color: white; background: #ef4444; border: none;">Verbannen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Noodstop Modal -->
+    <div id="status-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 1000;">
+        <div class="modal" style="background: var(--surface); padding: 32px; border-radius: 20px; width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+            <h2 style="color: var(--danger);">Noodstop (Killswitch)</h2>
+            <p>Vink aan wat je direct wil uitschakelen wegens een glitch of onderhoud. Dit is onmiddellijk actief voor alle spelers.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="status-toggle-chat"> SmartBuddy Chat
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="status-toggle-smartbloob"> SmartBloob.io
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="status-toggle-smartwave"> SmartWave.io
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="status-toggle-smartpong"> SmartPong.io
+                </label>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button class="btn" id="status-modal-close">Sluiten</button>
+                <button class="btn btn-danger" id="status-modal-save" style="color: white; background: #ef4444; border: none;">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="../static/js/firebase-app-compat.js"></script>
+    <script src="../static/js/firebase-database-compat.js"></script>
+    <script src="moderation.js"></script>
+</body>
+</html>
