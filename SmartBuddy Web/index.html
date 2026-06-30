@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SmartBuddy</title>
+
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Google Symbols (Behouden zoals gevraagd) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Symbols:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        :root {
+            --border-color: #d1d5db;
+            --text-main: #374151;
+            --text-muted: #6b7280;
+            --bg-body: #f9fafb;
+            --bg-container: #ffffff;
+            --primary: #FF4500;
+            --primary-hover: #e03e00;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .google-symbols {
+            font-family: 'Google Symbols';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            vertical-align: middle;
+            color: var(--primary);
+        }
+
+        /* Views & SPA Fade Logic */
+        .view-container {
+            position: relative;
+            width: 100%;
+            flex: 1;
+        }
+
+        .view {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .view.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+
+        /* Classic Nav */
+        nav {
+            background: var(--bg-container);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: var(--text-main);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 15px; 
+            align-items: center;
+        }
+
+        .nav-btn {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            text-decoration: underline;
+        }
+
+        .btn-install {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-install:hover {
+            background: var(--primary-hover);
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        /* Containers */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--bg-container);
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Hero */
+        header {
+            text-align: center;
+            padding: 20px 0 40px 0;
+        }
+
+        h1 { 
+            font-size: 32px; 
+            color: #111827;
+            margin-bottom: 20px; 
+        }
+
+        .tagline { 
+            font-size: 16px; 
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--text-main);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cta-button .google-symbols {
+            color: #ffffff;
+            font-size: 20px;
+        }
+
+        .cta-button:hover { 
+            background: #111827;
+        }
+
+        /* Classic Headers */
+        h2.section-title {
+            font-size: 22px;
+            color: #111827;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Features */
+        .features-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px 20px;
+            background: var(--bg-body);
+            cursor: pointer;
+        }
+
+        .feature-card:hover, .feature-card.locked {
+            border-color: var(--primary);
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            margin: 0;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-card h3 .google-symbols {
+            font-size: 20px;
+        }
+
+        .dropdown-icon {
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: none;
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .feature-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .feature-list li .google-symbols {
+            font-size: 16px;
+        }
+
+        .feature-card.locked .feature-list {
+            display: block;
+        }
+
+        .feature-card.locked .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Steps */
+        .steps-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .step {
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            background: var(--bg-body);
+            padding: 15px 20px;
+            border-radius: 4px;
+        }
+
+        .num {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .step-info h3 {
+            margin: 0 0 5px 0;
+            color: #111827;
+            font-size: 16px;
+        }
+
+        .step-info p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .step-info a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .step-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Team */
+        .team-card {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 6px;
+            background: var(--bg-body);
+        }
+
+        .team-card h3 {
+            margin-top: 0;
+            color: #111827;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .contributor-list {
+            list-style: none;
+        }
+
+        .contributor-list b {
+            color: #111827;
+        }
+
+        .contributor-list p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Privacy */
+        .privacy-date {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .privacy-summary {
+            background: #fff3f0;
+            border: 1px solid #ffd8cc;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .privacy-summary .badge {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .privacy-summary p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .privacy-card {
+            margin-bottom: 25px;
+        }
+
+        .privacy-card h3 {
+            color: #111827;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .privacy-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .privacy-card ul {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        .privacy-card ul li {
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .privacy-card ul li .google-symbols {
+            font-size: 18px;
+        }
+
+        .privacy-card a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .privacy-card a:hover {
+            text-decoration: underline;
+        }
+
+        .privacy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .privacy-table th, .privacy-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .privacy-table th {
+            background: var(--bg-body);
+            color: #111827;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 14px;
+            background: var(--bg-container);
+            margin-top: auto;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Scroll Animations (Behouden zoals gevraagd) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a class="logo" onclick="showHome(event)">Smart<span>Buddy</span></a>
+        <div class="nav-links">
+            <a href="#setup" class="nav-btn" onclick="showHome(event, '#setup')">Installatie</a>
+            <a class="nav-btn" onclick="showPrivacy(event)">Privacy</a>
+            <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank" class="nav-btn btn-install">Toevoegen aan Chrome</a>
+        </div>
+    </nav>
+
+    <div class="view-container">
+        <!-- HOME VIEW -->
+        <div id="home-view" class="view active">
+            <div class="container">
+                <header>
+                    <h1>SmartBuddy — Build the new way</h1>
+                    <p class="tagline">
+                        Ervaar Smartschool als nooit tevoren. Met de naadloze integratie van AI-tools, verbeterde weergaves en multiplayer games transformeert SmartBuddy jouw schoolervaring tot een productieve en plezierige omgeving.
+                    </p>
+                    <a href="#setup" class="cta-button" onclick="showHome(event, '#setup')">
+                        <span class="google-symbols">download</span>
+                        Aan de slag
+                    </a>
+                </header>
+            </div>
+
+            <div class="container">
+                <h2 class="section-title">Ontdek de functies</h2>
+
+                <div class="features-grid">
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">chat</span> Berichten</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> AI Verbeteraar</li>
+                            <li><span class="google-symbols">check</span> Gewoon Verbeteren</li>
+                            <li><span class="google-symbols">check</span> Formeel</li>
+                            <li><span class="google-symbols">check</span> Heel Formeel</li>
+                            <li><span class="google-symbols">check</span> AI Vertalen (Frans, Duits, Engels)</li>
+                            <li><span class="google-symbols">check</span> AI Onderwerp (Automatisch)</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">bar_chart</span> Resultaten</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> SmartBuddy Resultatenoverzicht</li>
+                            <li><span class="google-symbols">check</span> Voortgangsrapport</li>
+                            <li><span class="google-symbols">check</span> Motiverende Quotes</li>
+                            <li><span class="google-symbols">check</span> Jaartotaal</li>
+                            <li><span class="google-symbols">check</span> Kleurcodering Scores</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">calculate</span> Punten</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> Totaalberekening Lijstweergave</li>
+                            <li><span class="google-symbols">check</span> Totaalberekening Rasterweergave</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">forum</span> SmartChat</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> Realtime Algemene Chatroom</li>
+                            <li><span class="google-symbols">check</span> Berichten Sturen & Ontvangen</li>
+                            <li><span class="google-symbols">check</span> In Contact Met Medeleerlingen</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">sports_esports</span> Games</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> SmartBuddy Games Menu</li>
+                            <li><span class="google-symbols">check</span> SmartBloob.io (Multiplayer)</li>
+                            <li><span class="google-symbols">check</span> SmartWave.io (Geoptimaliseerde UI)</li>
+                            <li><span class="google-symbols">check</span> SmartPong.io (Multiplayer)</li>
+                            <li><span class="google-symbols">check</span> Globale Online Leaderboards (Hoofdmenu)</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card reveal" onclick="toggleLock(this)">
+                        <div class="feature-header">
+                            <h3><span class="google-symbols">extension</span> Extra's</h3>
+                            <span class="google-symbols dropdown-icon">expand_more</span>
+                        </div>
+                        <ul class="feature-list">
+                            <li><span class="google-symbols">check</span> Custom SmartBuddy Login Pagina</li>
+                            <li><span class="google-symbols">check</span> Nieuw SmartBuddy Icoon (Favicon)</li>
+                            <li><span class="google-symbols">check</span> Interactieve Rondleiding</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container" id="setup">
+                <h2 class="section-title">Hoe SmartBuddy te installeren</h2>
+
+                <div class="steps-grid">
+                    <div class="step reveal">
+                        <div class="num">01</div>
+                        <div class="step-info">
+                            <h3>Chrome Web Store</h3>
+                            <p>Ga naar de officiële Web Store en zoek naar SmartBuddy of klik direct op 
+                                <a href="https://chromewebstore.google.com/detail/fndiolbcfhmgdglheombonplgkdanimo" target="_blank">SmartBuddy</a>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step reveal">
+                        <div class="num">02</div>
+                        <div class="step-info">
+                            <h3>Klik op "Installeren"</h3>
+                            <p>Klik simpelweg op de downloadknop en sta vervolgens de vereiste machtigingen toe in je browser.</p>
+                        </div>
+                    </div>
+
+                    <div class="step reveal">
+                        <div class="num">03</div>
+                        <div class="step-info">
+                            <h3>Start je Smartschool</h3>
+                            <p>Navigeer naar je eigen Smartschool-pagina en vernieuw deze. Je reis is begonnen.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <h2 class="section-title">Ontwikkeld door</h2>
+                <div class="team-card reveal">
+                    <h3>Developer Team</h3>
+                    <ul class="contributor-list">
+                        <li><b>Kleine_Lars</b></li>
+                        <p>CEO, Developer, Designer, Social Media Manager & Discord Administrator</p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRIVACY VIEW -->
+        <div id="privacy-view" class="view">
+            <div class="container" id="privacy">
+                <h2 class="section-title">Privacybeleid</h2>
+                <p class="privacy-date">Laatst bijgewerkt: 11 juni 2026</p>
+
+                <div class="privacy-summary">
+                    <span class="badge">Samenvatting</span>
+                    <p>Voor de hoofdfuncties verzamelt SmartBuddy <strong>geen persoonlijke gegevens</strong> en wordt alles lokaal opgeslagen. Bij AI-functies wordt je bericht naar Google Gemini gestuurd. Alleen wanneer je de <strong>SmartBuddy Games</strong> speelt, slaan we je gekozen in-game naam en je Smartschool-naam op in onze online database (Google Firebase) om online leaderboards en multiplayer mogelijk te maken.</p>
+                </div>
+
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">database</span> Welke gegevens worden verzameld</h3>
+                    <p>SmartBuddy slaat de volgende gegevens <strong>lokaal</strong> op in je browser via <code>chrome.storage.sync</code> of <code>chrome.storage.local</code>:</p>
+                    <table class="privacy-table">
+                        <thead>
+                            <tr>
+                                <th>Gegeven</th>
+                                <th>Doel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>AI-verbeterstijl</td>
+                                <td>Onthouden van je voorkeur (gewoon / formeel / zeer formeel)</td>
+                            </tr>
+                            <tr>
+                                <td>Thema-instellingen</td>
+                                <td>Onthouden van je gekozen kleurenschema</td>
+                            </tr>
+                            <tr>
+                                <td>Tutorial-status</td>
+                                <td>Bijhouden of de rondleiding al getoond is</td>
+                            </tr>
+                            <tr>
+                                <td>Game Gebruikersnaam & Smartschool Naam</td>
+                                <td>Gekoppeld om een unieke spelersnaam te garanderen voor online leaderboards (opgeslagen in <code>chrome.storage.local</code> en Firebase)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>De instellingen worden <strong>uitsluitend lokaal</strong> in je browser opgeslagen. Alleen gegevens gerelateerd aan SmartBuddy Games (je gekozen naam, Smartschool-naam en topscores) worden naar een beveiligde Firebase database verstuurd.</p>
+                </div>
+
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">share</span> Gegevensverwerking door derden</h3>
+                    <p>Wanneer je een van de <strong>AI-functies</strong> gebruikt, wordt het volgende naar de <strong>Google Gemini API</strong> verstuurd:</p>
+                    <ul>
+                        <li><span class="google-symbols">arrow_right</span> De <strong>platte tekst</strong> van je bericht (maximaal 3.000 tekens)</li>
+                    </ul>
+                    <br>
+                    <p>Wanneer je <strong>SmartBuddy Games</strong> speelt, sturen we het volgende naar <strong>Google Firebase</strong> (onze online database):</p>
+                    <ul>
+                        <li><span class="google-symbols">arrow_right</span> Je gekozen spelersnaam en je echte Smartschool-naam</li>
+                        <li><span class="google-symbols">arrow_right</span> Je behaalde topscores</li>
+                    </ul>
+                    <br>
+                    <p>Beide diensten worden verwerkt door <strong>Google LLC</strong> volgens hun eigen privacybeleid: <a href="https://policies.google.com/privacy" target="_blank">Google Privacybeleid</a>.</p>
+                    <p>SmartBuddy maakt uitsluitend gebruik van de veilige Google-infrastructuur (Gemini & Firebase) en deelt geen gegevens met andere externe partijen.</p>
+                </div>
+
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">block</span> Gegevens die NIET worden verzameld</h3>
+                    <p>SmartBuddy verzamelt <strong>geen</strong>:</p>
+                    <ul>
+                        <li><span class="google-symbols">close</span> Persoonlijke identificatiegegevens (naam, e-mailadres, etc.)</li>
+                        <li><span class="google-symbols">close</span> Browsegeschiedenis of surfgedrag</li>
+                        <li><span class="google-symbols">close</span> Schoolresultaten of cijfers (deze worden alleen lokaal in je browser weergegeven)</li>
+                        <li><span class="google-symbols">close</span> Inloggegevens van Smartschool</li>
+                        <li><span class="google-symbols">close</span> Cookies of tracking-gegevens</li>
+                        <li><span class="google-symbols">close</span> Analytische of diagnostische gegevens</li>
+                    </ul>
+                </div>
+
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">storage</span> Hoe gegevens worden opgeslagen</h3>
+                    <p>Alle instellingen worden opgeslagen via de <strong>Chrome Storage API</strong>. Dit betekent:</p>
+                    <ul>
+                        <li><span class="google-symbols">arrow_right</span> Gegevens worden <strong>lokaal</strong> in je browser opgeslagen</li>
+                        <li><span class="google-symbols">arrow_right</span> Als je bent ingelogd op Chrome, worden sync-instellingen gesynchroniseerd tussen je apparaten via je Google-account</li>
+                        <li><span class="google-symbols">arrow_right</span> Gegevens worden automatisch verwijderd wanneer je de extensie verwijdert</li>
+                        <li><span class="google-symbols">arrow_right</span> Je kunt alle gegevens handmatig wissen via de extensie-instellingen in Chrome</li>
+                    </ul>
+                </div>
+
+                <div class="privacy-card">
+                    <h3><span class="google-symbols">admin_panel_settings</span> Toestemming en controle</h3>
+                    <ul>
+                        <li><span class="google-symbols">check_circle</span> De AI-functies maken nu gebruik van een veilig ingebouwde API-sleutel</li>
+                        <li><span class="google-symbols">check_circle</span> Berichttekst wordt <strong>alleen</strong> verstuurd wanneer jij op een AI-knop klikt</li>
+                        <li><span class="google-symbols">check_circle</span> Je kunt alle opgeslagen gegevens wissen via <strong>chrome://extensions</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 SmartBuddy • Built by <b>Kleine_Lars</b> • <a onclick="showPrivacy(event)">Privacybeleid</a>
+    </footer>
+
+    <script>
+        function toggleLock(element) {
+            element.classList.toggle('locked');
+        }
+
+        function showHome(e, targetId = null) {
+            if (e) e.preventDefault();
+            document.getElementById('privacy-view').classList.remove('active');
+            document.getElementById('home-view').classList.add('active');
+            
+            if (targetId) {
+                setTimeout(() => {
+                    const el = document.querySelector(targetId);
+                    if (el) {
+                        const y = el.getBoundingClientRect().top + window.scrollY - 20;
+                        window.scrollTo({top: y, behavior: 'smooth'});
+                    }
+                }, 100);
+            } else {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+
+        function showPrivacy(e) {
+            if (e) e.preventDefault();
+            document.getElementById('home-view').classList.remove('active');
+            document.getElementById('privacy-view').classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#privacy') {
+                showPrivacy();
+            } else if (window.location.hash === '#setup') {
+                showHome(null, '#setup');
+            }
+
+            // Init Scroll Animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
